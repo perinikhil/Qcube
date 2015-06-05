@@ -9,13 +9,44 @@ class DepartmentController extends \BaseController {
 	}
 
 	
+	public static function storeDepartmentHead($departmentHead, $department)
+	{
+		if($existingUser = User::where('email', $departmentHead['email'])->first())
+		{
+			$existingUser->department_id = $department->id;
+			$existingUser->permissions = Permissions::addPermissions((string)$existingUser->permissions, 'd');
+			if($existingUser->save())
+			{
+				return true;
+				
+			}
+			else
+				return false;
+		}
+		else
+		{
+			$details['name'] = $departmentHead['name'];
+			$details['email'] = $departmentHead['email'];
+			$details['password'] = Hash::make('changeme');
+			$details['permissions'] = 'd';
+			$details['department_id'] = $department->id;
+			$details['organization_id'] = Auth::user()->organization_id;
+			if($user = User::create($details))
+				return true;
+	        else
+	        	return false;
+
+		}
+	}
+
 	public function store($organizationId)
 	{
 		$validate  = Validator::make(Input::all(), Department::$rules);
+
 		if($validate->fails())
 		{
 			return Response::json(['alert' => Messages::$validateFail,
-				'messages' => $valdate->messages()],
+				'messages' => $validate->messages()],
 				403);
 		}
 		else
@@ -24,9 +55,14 @@ class DepartmentController extends \BaseController {
 			$details['organization_id'] = $organizationId;
 
 		    if($department = Department::create($details))
-	        	return Response::json(['department' => $department,
-	        		'alert' => Messages::$createSuccess.'department'],
-	        		200);
+		    {
+		    	if(self::storeDepartmentHead($details['department_head'], $department))
+			    	return Response::json(['department' => $department,
+			        	'alert' => Messages::$createSuccess.'department and department head'],
+			        	200);
+			    else
+	        		return Response::json(['alert' => Messages::$createFail.'department head'], 500);
+		    }
 	        else
 	        	return Response::json(['alert' => Messages::$createFail.'department'], 500);
 	   	}
@@ -44,15 +80,69 @@ class DepartmentController extends \BaseController {
 	}
 
 	
+	public static function updateDepartmentHead($departmentHead, $department)
+	{
+		$newHead = User::where('email', $departmentHead['email'])->first();
+		$oldHead = User::where('department_id', $department->id)->where('permissions', 'LIKE', '%d%')->first();
+	
+		if($oldHead)	//swap permissions for the new and old hod
+		{
+			$newHead->permissions = Permissions::addPermissions((string)$newHead->permissions, 'd');
+			$oldHead->permissions = Permissions::removePermissions((string)$oldHead->permissions, 'd');
+			$newHead->department_id = $department->id;
+			if($oldHead->save() && $newHead->save())
+			{
+				return true;
+			}
+			else
+				return false;
+		}
+		else if($newHead)
+		{
+			$newHead->permissions = Permissions::addPermissions($newHead->permissions, 'd');
+			$newHead->department_id = $department->id;
+
+			if($newHead->save())
+				return true;
+	        else
+	        	return false;
+
+		}
+		else
+		{
+			$details['name'] = $departmentHead['name'];
+			$details['email'] = $departmentHead['email'];
+			$details['password'] = Hash::make('changeme');
+			$details['permissions'] = 'd';
+			$details['department_id'] = $department->id;
+			$details['organization_id'] = Auth::user()->organization_id;
+			if($user = User::create($details))
+				return true;
+	        else
+	        	return false;
+		}
+	}
+
 	public function update($organizationId, $id)
 	{
-		$department = Organization::find($organizationId)->departments()->where('id', $id);
-		$details = Input::all();
-
+		$department = Organization::find($organizationId)->departments()->find($id);
+		$details = Input::except('department_head');
+		
 		if($department)
 		{
 			if($department->update($details))
-	        	return Response::json(['alert' => Messages::$updateSuccess.'department'], 200);
+			{
+				$department = Department::find($department->id);
+				if(Input::has('department_head'))
+		    	{
+		    		if(self::updateDepartmentHead(Input::get('department_head'), $department))
+		    			return Response::json(['department' => $department,
+		        			'alert' => Messages::$updateSuccess.'department and department head'],
+		        			200);
+		    		else
+	        			return Response::json(['alert' => Messages::$updateFail.'department head'], 500);
+		    	}
+			}
 	        else
 	        	return Response::json(['alert' => Messages::$updateFail.'department'], 500);
 		}

@@ -64,7 +64,7 @@ class AttachmentController extends \BaseController {
 		        {
 		        	if($attachment->update($details))
 		        	{
-		        		File::delete($destinationPath.$oldAttachment->path)
+		        		File::delete($destinationPath.$oldAttachment->path);
 		        		return Response::json(['alert' => 'Sucessfully uploaded attachment']);
 		        	}
 		        	else

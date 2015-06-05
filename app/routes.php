@@ -5,7 +5,8 @@ Route::get('/', function() {
 });
 
 Route::get('/hello', function() {
-	return Response::json(['hello world'], 200);
+    $str = Permissions::removePermission('o', 'o');
+	return Response::json([$str], 200);
 });
 
 Route::group(array('prefix' => 'api'), function() {

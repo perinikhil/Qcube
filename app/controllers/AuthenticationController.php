@@ -6,7 +6,7 @@ class AuthenticationController extends \BaseController
 	public function login()
 	{
 		$rules = [
-			'username' => 'required',
+			'email' => 'required',
 			'password' => 'required | alphaNum | min:3'
 		];
 
@@ -20,7 +20,7 @@ class AuthenticationController extends \BaseController
 		}
 		else
 		{
-			$credentials = Input::only('username','password');
+			$credentials = Input::only('email','password');
 
 			if (Auth::attempt($credentials))
 				return Response::json([	'alert' => Messages::$loginSuccess],

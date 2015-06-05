@@ -22,7 +22,8 @@ class UserController extends \BaseController {
 		{
 			$details = Input::all();
 			$details['password'] = Hash::make('changeme');
-
+			$details['department_id'] = Auth::user()->department_id;
+			$details['organization_id'] = Auth::user()->organization_id;
 
 		    if(User::create($details))
 	        	return Response::json(['alert' => Messages::$createSuccess.'user'], 200);
@@ -48,12 +49,12 @@ class UserController extends \BaseController {
 		$user = User::find($id);
 
 		//change password
-		if(Input::has('oldPassword') && Input::has('newPassword'))
+		if(Input::has('old_password') && Input::has('new_password'))
 		{
 			$validate = Validator::make(Input::all(), User::$newPasswordUpdateRules);
 
 			$credentials = ['email' => $user['email'],
-							'password' => $details['oldPassword']];
+							'password' => $details['old_password']];
 			if(!(Auth::validate($credentials)))
 			{
 				return Response::json(['alert' => 'Old password does not match']);
@@ -61,7 +62,7 @@ class UserController extends \BaseController {
 			else
 			{
 				$details['email'] = Input::get('email');
-				$details['password'] = Hash::make(Input::get('newPassword'));
+				$details['password'] = Hash::make(Input::get('new_password'));
 				if($user->update($details))
 		        	return Response::json(['alert' => Messages::$updateSuccess.'password'], 200);
 		        else

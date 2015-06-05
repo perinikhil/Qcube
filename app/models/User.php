@@ -30,8 +30,6 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	public static $storeRules = [
 			'email' => 'required | unique:users,email',
 			'name' => 'required',
-			'organization_id' => 'required',
-			'department_id' => 'required'
 		];
 
 	public static $emailUpdateRules = [
@@ -40,7 +38,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 
 	public static $newPasswordUpdateRules = [
 			'email' => 'unique:users,email',
-			'oldPassword' => 'required | min:3',
-			'newPassword' => 'required | min:3'
+			'old_password' => 'required | min:3',
+			'new_password' => 'required | min:3'
 		];
 }

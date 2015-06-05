@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration {
 			$table->string('name');
 			$table->string('email')->unique();
 			$table->string('password');
-			$table->string('permissions')->nullable()->default(NULL);
+			$table->string('permissions')->nullable()->default('');
 			$table->integer('organization_id')->unsigned();
 			$table->foreign('organization_id')->references('id')->on('organizations');
 			$table->integer('department_id')->unsigned()->nullable();
