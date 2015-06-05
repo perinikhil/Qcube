@@ -1,11 +1,11 @@
 <?php
 
 class Attachment extends \Eloquent {
-	protected $fillable = ['question_id','attachment'];
+	protected $fillable = ['question_id','path'];
 
 	public static $rules = [
 		'question_id' => 'required',
-		'attachment' => 'required'
+		'path' => 'required'
 	];
 
 	public function question()

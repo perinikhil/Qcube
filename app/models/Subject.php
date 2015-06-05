@@ -1,12 +1,13 @@
 <?php
 
 class Subject extends \Eloquent {
-	protected $fillable = ['department_id', 'name', 'subject_code', 'class'];
+	protected $fillable = ['department_id', 'name', 'subject_code', 'sem'];
 
 	public static $rules = [
 		'department_id' => 'required',
 		'name' => 'required',
-		'class' => 'required'
+		'abbr' => 'required',
+		'semester' => 'required'
 		];
 
 	public function questions()

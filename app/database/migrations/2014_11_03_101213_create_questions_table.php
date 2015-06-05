@@ -19,7 +19,7 @@ class CreateQuestionsTable extends Migration {
 			$table->integer('subject_id')->unsigned();
 			$table->foreign('subject_id')->references('id')->on('subjects');
 			$table->string('unit');
-			$table->longText('question');
+			$table->longText('text');
 			$table->integer('marks')->unsigned();
 			$table->text('tags')->nullable();
 

@@ -18,7 +18,7 @@ class CreateAttachmentsTable extends Migration {
 
 			$table->integer('question_id')->unsigned();
 			$table->foreign('question_id')->references('id')->on('questions');
-			$table->string('attachment');
+			$table->string('path');
 
 			$table->timestamps();
 		});

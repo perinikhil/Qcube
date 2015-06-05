@@ -6,7 +6,7 @@ class Question extends \Eloquent {
 	public static $rules = [
 		'subject_id' => 'required',
 		'unit' => 'required',
-		'question' => 'required',
+		'text' => 'required',
 		'marks' => 'required'
 	];
 	

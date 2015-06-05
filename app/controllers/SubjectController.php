@@ -24,8 +24,10 @@ class SubjectController extends \BaseController {
 		}
 		else
 		{
-			if(Subject::create($details))
-	        	return Response::json(['alert' => Messages::$createSuccess.'subject'], 200);
+			if($subject = Subject::create($details))
+	        	return Response::json(['subject' => $subject,
+	        		'alert' => Messages::$createSuccess.'subject'],
+	        		200);
 	        else
 	        	return Response::json(['alert' => Messages::$createFail.'subject'], 500);
 		}

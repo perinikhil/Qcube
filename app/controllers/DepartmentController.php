@@ -23,8 +23,10 @@ class DepartmentController extends \BaseController {
 			$details = Input::all();
 			$details['organization_id'] = $organizationId;
 
-		    if(Department::create($details))
-	        	return Response::json(['alert' => Messages::$createSuccess.'department'], 200);
+		    if($department = Department::create($details))
+	        	return Response::json(['department' => $department,
+	        		'alert' => Messages::$createSuccess.'department'],
+	        		200);
 	        else
 	        	return Response::json(['alert' => Messages::$createFail.'department'], 500);
 	   	}

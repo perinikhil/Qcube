@@ -10,7 +10,7 @@ class QuestionsTableSeeder extends Seeder {
 			'id' => 1,
 			'subject_id' => 1,
 			'unit' => 'First',
-			'question' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			'text' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 							tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
 							consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -23,7 +23,7 @@ class QuestionsTableSeeder extends Seeder {
 			'id' => 2,
 			'subject_id' => 1,
 			'unit' => 'First',
-			'question' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			'text' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 							tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
 							consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -37,7 +37,7 @@ class QuestionsTableSeeder extends Seeder {
 			'id' => 3,
 			'subject_id' => 1,
 			'unit' => 'Second',
-			'question' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			'text' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 							tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
 							consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -50,7 +50,7 @@ class QuestionsTableSeeder extends Seeder {
 			'id' => 4,
 			'subject_id' => 1,
 			'unit' => 'Second',
-			'question' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			'text' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 							tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
 							consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -62,7 +62,7 @@ class QuestionsTableSeeder extends Seeder {
 			'id' => 9,
 			'subject_id' => 1,
 			'unit' => 'First',
-			'question' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			'text' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 							tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
 							consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -75,7 +75,7 @@ class QuestionsTableSeeder extends Seeder {
 			'id' => 10,
 			'subject_id' => 1,
 			'unit' => 'First',
-			'question' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			'text' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 							tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
 							consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -89,7 +89,7 @@ class QuestionsTableSeeder extends Seeder {
 			'id' => 11,
 			'subject_id' => 1,
 			'unit' => 'Second',
-			'question' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			'text' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 							tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
 							consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -102,7 +102,7 @@ class QuestionsTableSeeder extends Seeder {
 			'id' => 12,
 			'subject_id' => 1,
 			'unit' => 'Second',
-			'question' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			'text' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 							tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
 							consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -115,7 +115,7 @@ class QuestionsTableSeeder extends Seeder {
 			'id' => 5,
 			'subject_id' => 2,
 			'unit' => 'First',
-			'question' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			'text' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 							tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
 							consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -128,7 +128,7 @@ class QuestionsTableSeeder extends Seeder {
 			'id' => 6,
 			'subject_id' => 2,
 			'unit' => 'First',
-			'question' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			'text' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 							tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
 							consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -142,7 +142,7 @@ class QuestionsTableSeeder extends Seeder {
 			'id' => 7,
 			'subject_id' => 2,			
 			'unit' => 'Second',
-			'question' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			'text' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 							tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
 							consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -155,7 +155,7 @@ class QuestionsTableSeeder extends Seeder {
 			'id' => 8,
 			'subject_id' => 2,
 			'unit' => 'Second',
-			'question' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			'text' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 							tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
 							consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -168,7 +168,7 @@ class QuestionsTableSeeder extends Seeder {
 			'id' => 13,
 			'subject_id' => 2,
 			'unit' => 'First',
-			'question' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			'text' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 							tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
 							consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -181,7 +181,7 @@ class QuestionsTableSeeder extends Seeder {
 			'id' => 14,
 			'subject_id' => 2,
 			'unit' => 'First',
-			'question' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			'text' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 							tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
 							consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -195,7 +195,7 @@ class QuestionsTableSeeder extends Seeder {
 			'id' => 15,
 			'subject_id' => 2,			
 			'unit' => 'Second',
-			'question' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			'text' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 							tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
 							consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -208,7 +208,7 @@ class QuestionsTableSeeder extends Seeder {
 			'id' => 16,
 			'subject_id' => 2,
 			'unit' => 'Second',
-			'question' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			'text' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 							tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
 							consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse

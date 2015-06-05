@@ -22,8 +22,10 @@ class OrganizationController extends \BaseController {
 		{
 			$details = Input::all();
 
-		    if(Organization::create($details))
-	        	return Response::json(['alert' => Messages::$createSuccess.'organization'], 200);
+		    if($organization = Organization::create($details))
+	        	return Response::json(['organization' => $organization,
+	        		'alert' => Messages::$createSuccess.'organization'],
+	        		 200);
 	        else
 	        	return Response::json(['alert' => Messages::$createFail.'organization'], 500);
 	   	}

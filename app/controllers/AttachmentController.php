@@ -2,35 +2,14 @@
 
 class AttachmentController extends \BaseController {
 
-	/**
-	 * Display a listing of the resource.
-	 * GET /attachment
-	 *
-	 * @return Response
-	 */
+	
 	public function index($departmentId, $subjectId, $questionId)
 	{
-		$attachments = Question::where('id', $questionId)->where('subject_id',$subjectId)->first()->attachments;
+		$attachments = Department::find($departmentId)->subjects()->find($subjectId)->questions()->find($questionId)->attachments;
 		return Response::json($attachments);
 	}
 
-	/**
-	 * Show the form for creating a new resource.
-	 * GET /attachment/create
-	 *
-	 * @return Response
-	 */
-	// public function create()
-	// {
-	// 	//
-	// }
-
-	/**
-	 * Store a newly created resource in storage.
-	 * POST /attachment
-	 *
-	 * @return Response
-	 */
+	
 	public function store($departmentId, $subjectId, $questionId)
 	{
 		$details = Input::all();
@@ -42,100 +21,88 @@ class AttachmentController extends \BaseController {
 	        $extension = $file->getClientOriginalExtension();
 	        $fileName = $questionId . '_' . str_random(16) . '.' . $extension;
 	        $destinationPath = 'uploads/attachments';
-	        $details['attachment'] = $fileName;
+	        $details['path'] = $fileName;
 	        if(($file->move($destinationPath, $fileName)))
 	        {
 	        	if(Attachment::create($details))
 	        	{
-	        		return Response::json(['success' => true,
-	        								'alert' => 'Sucessfully uploaded attachment']);
+	        		return Response::json(['alert' => 'Sucessfully uploaded attachment']);
 	        	}
 	        	else
 	        	{
 	        		File::delete($destinationPath.$fileName);
-	        		return Response::json(['success' => false,
-	        								'alert' => 'Failed to upload attachment']);
+	        		return Response::json(['alert' => 'Failed to upload attachment']);
 	        	}
 	        }
 	        else
 	        {
-	        	return Response::json(['success' => false,
-	        								'alert' => 'Failed to upload attachment']);
+	        	return Response::json(['alert' => 'Failed to upload attachment']);
 	        }
 		}
 		else
 		{
-			return Response::json(['success' => false,
-									'alert' => 'No attachment found']);
+			return Response::json(['alert' => 'No attachment found']);
 		}
 	}
 
-	/**
-	 * Display the specified resource.
-	 * GET /attachment/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
+	
+	public function update($departmentId, $subjectId, $questionId, $attachmentId)
 	{
-		//
+		$attachment = Department::find($departmentId)->subjects()->find($subjectId)->questions()->find($questionId)->attachments()->find($attachmentId);
+		$oldAttachment = $attachment;
+		$destinationPath = 'uploads/attachments';
+
+		if($attachment)
+		{
+			if(Input::hasFile('attachment'))
+			{
+				$newFile = Input::file('attachment');
+		        $extension = $newFile->getClientOriginalExtension();
+		        $newFileName = $questionId . '_' . str_random(16) . '.' . $extension;
+		        $details['path'] = $newFileName;
+		        if(($newFile->move($destinationPath, $newFileName)))
+		        {
+		        	if($attachment->update($details))
+		        	{
+		        		File::delete($destinationPath.$oldAttachment->path)
+		        		return Response::json(['alert' => 'Sucessfully uploaded attachment']);
+		        	}
+		        	else
+		        	{
+		        		File::delete($destinationPath.$newFileName);
+		        		return Response::json(['alert' => 'Failed to update attachment']);
+		        	}
+		        }
+		        else
+		        {
+		        	return Response::json(['alert' => 'Failed to upload attachment']);
+		        }
+			}
+		}
 	}
 
-	/**
-	 * Show the form for editing the specified resource.
-	 * GET /attachment/{id}/edit
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	// public function edit($id)
-	// {
-	// 	//
-	// }
-
-	/**
-	 * Update the specified resource in storage.
-	 * PUT /attachment/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 * DELETE /attachment/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
+	
 	public function destroy($departmentId, $subjectId, $questionId, $attachmentId)
 	{
-		$attachment = Attachment::where('id', $attachmentId)->where('question_id',$questionId)->first();
-		if(Question::where('id', $questionId)->where('subject_id', $subjectId)->first())
+		$attachment = Department::find($departmentId)->subjects()->find($subjectId)->questions()->find($questionId)->attachments()->find($attachmentId);
+
+		if($attachment)
 		{
 			$destinationPath = 'uploads/attachments/';
-			$fileName = $destinationPath . $attachment->attachment;
+			$fileName = $destinationPath . $attachment->path;
 			if($attachment->delete())
 			{
 				File::delete($fileName);
-				return Response::json(['success' => true,
-										'alert' => 'Successfully deleted attachment']);
+				return Response::json(['alert' => 'Successfully deleted attachment']);
 			}
 			else
 			{
-				return Response::json(['success' => false,
-										'alert' => 'Failed to delete attachment']);
+				return Response::json(['alert' => 'Failed to delete attachment']);
 			}
 		}
 		else
 		{
-			return Response::json(['success' => false,
-									'alert' => 'Attachment not found']);
+			return Response::json(['alert' => 'Attachment not found']);
 		}
 	}
 }

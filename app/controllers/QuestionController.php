@@ -2,35 +2,14 @@
 
 class QuestionController extends \BaseController {
 
-	/**
-	 * Display a listing of the resource.
-	 * GET /question
-	 *
-	 * @return Response
-	 */
+	
 	public function index($departmentId, $subjectId)
 	{
-		$questions = Subject::find($subjectId)->questions;
+		$questions = Department::find($departmentId)->subjects()->find($subjectId)->questions;
 		return Response::json($questions);
 	}
 
-	/**
-	 * Show the form for creating a new resource.
-	 * GET /question/create
-	 *
-	 * @return Response
-	 */
-	// public function create()
-	// {
-	// 	//
-	// }
-
-	/**
-	 * Store a newly created resource in storage.
-	 * POST /question
-	 *
-	 * @return Response
-	 */
+	
 	public function store($departmentId, $subjectId)
 	{
 		$details = Input::all();
@@ -40,97 +19,63 @@ class QuestionController extends \BaseController {
 
 		if($validate->fails())
 		{
-			return Responese::json(['success' => false,
-									'alert' => 'Failed to validate']);
+			return Responese::json(['alert' => Messages::$validateFail], 403);
 		}
 		else
 		{
-			if(Question::create($details))
-	        	return Response::json(['success' => true,
-	        							'alert' => 'Successfully added question']);
+			if($question = Question::create($details))
+	        	return Response::json(['question' => $question,
+	        		'alert' => Messages::$createSuccess.'question'],
+	        		200);
 	        else
-	        	return Response::json(['success' => false,
-	        							'alert' => 'Failed to add question']);
+	        	return Response::json(['alert' => Messages::$createFail.'question'], 500);
 		}
 	}
 
-	/**
-	 * Display the specified resource.
-	 * GET /question/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
+	
 	public function show($departmentId, $subjectId, $questionId)
 	{
-		$question = Question::find($questionId);
-		if($question && $question['subject_id']==$subjectId)
+		// $question = Question::find($questionId);
+		$question = Department::find($departmentId)->subjects()->find($subjectId)->questions()->find($questionId);
+
+		if($question)
 			return Response::json($question);
 		else
-			return Response::json(['success' => false,
-	        						'alert' => 'Question not found']);
+			return Response::json(['alert' => 'Question'.Messages::$notFound], 404);
 	}
 
-	/**
-	 * Show the form for editing the specified resource.
-	 * GET /question/{id}/edit
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	// public function edit($id)
-	// {
-	// 	//
-	// }
-
-	/**
-	 * Update the specified resource in storage.
-	 * PUT /question/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
+	
 	public function update($departmentId, $subjectId, $questionId)
 	{
-		$question = Question::find($questionId);
+		$question = Department::find($departmentId)->subjects()->find($subjectId)->questions()->find($questionId);
+
 		$details = Input::all();
-		$details['subject_id'] = $subjectId;
 
-		$validate = Validator::make($details, Question::$rules);
-
-		if($validate->fails())
+		if($question)
 		{
-			return Response::json(['success' => false,
-									'alert' => 'Failed to validate']);
+			if($question->update($details))
+	        	return Response::json(['alert' => Messages::$updateSuccess.'question'], 200);
+	        else
+	        	return Response::json(['alert' => Messages::$updateFail.'question'], 500);
 		}
 		else
-		{
-			if($question['subject_id']==$subjectId && $question->update($details))
-	        	return Response::json(['success' => true,
-	        							'alert' => 'Successfully updated question']);
-	        else
-	        	return Response::json(['success' => false,
-	        							'alert' => 'Failed to update question']);
-		}
+			return Response::json(['alert' => Messages::$notFound], 404);
 	}
 
-	/**
-	 * Remove the specified resource from storage.
-	 * DELETE /question/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
+	
 	public function destroy($departmentId, $subjectId, $questionId)
 	{
-		$question = Question::find($questionId);
+		$question = Department::find($departmentId)->subjects()->find($subjectId)->questions()->find($questionId);
 
-		if($question['subject_id']==$subjectId && Question::destroy($questionId))
-			return Response::json(['success' => true,
-									'alert' => 'Successfully removed question']);
+		if($question)
+		{
+			if($question->delete())
+				return Response::json(['alert' => Messages::$deleteSuccess.'question']);
+			else
+				return Response::json(['alert' => Messages::$deleteFail.'question']);
+		}
 		else
-			return Response::json(['success' => false,
-									'alert' => 'Failed to remove question']);
+			return Response::json(['alert' => Messages::$notFound], 404);
 	}
 
 }
