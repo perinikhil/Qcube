@@ -1,11 +1,12 @@
 <?php
 
 class Pattern extends \Eloquent {
-	protected $fillable = ['department_id', 'name', 'no_sections', 'marks_mains'];
+	protected $fillable = ['department_id', 'name', 'header', 'no_sections', 'marks_mains'];
 
-	public $rules = [
+	public static $rules = [
 		'department_id' => 'required',
 		'name' => 'required',
+		'header' => 'required',
 		'no_sections' => 'required',
 		'marks_mains' => 'required'
 	];

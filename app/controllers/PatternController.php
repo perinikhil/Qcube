@@ -2,86 +2,73 @@
 
 class PatternController extends \BaseController {
 
-	/**
-	 * Display a listing of the resource.
-	 * GET /paperlayout
-	 *
-	 * @return Response
-	 */
-	public function index()
+	public function index($departmentId)
 	{
-		$paperLayouts = PaperLayout::all();
-		// explode(' ', no_mains_section)
+		$patterns = Department::find($departmentId)->patterns;
+		return Response::json($patterns);
 	}
 
-	/**
-	 * Show the form for creating a new resource.
-	 * GET /paperlayout/create
-	 *
-	 * @return Response
-	 */
-	public function create()
+	
+	public function store($departmentId)
 	{
-		//
+		$details = Input::all();
+		$details['department_id'] = $departmentId;
+
+		$validate = Validator::make($details, Pattern::$rules);
+
+		if($validate->fails())
+		{
+			return Response::json(['alert' => Messages::$validateFail, 
+				'messages' => $validate->messages()],
+				403);
+		}
+		else
+		{
+			if($pattern = Pattern::create($details))
+	        	return Response::json(['pattern' => $pattern,
+	        		'alert' => Messages::$createSuccess.'pattern'],
+	        		200);
+	        else
+	        	return Response::json(['alert' => Messages::$createFail.'pattern'], 500);
+		}
 	}
 
-	/**
-	 * Store a newly created resource in storage.
-	 * POST /paperlayout
-	 *
-	 * @return Response
-	 */
-	public function store()
+	
+	public function show($departmentId, $patternId)
 	{
-		//
+		$pattern = Department::find($departmentId)->patterns()->where('id', $patternId)->get();
+		if($pattern)
+			return Response::json($pattern);
+		else
+			return Response::json(['alert' => 'Pattern'.Messages::$notFound], 404);
 	}
 
-	/**
-	 * Display the specified resource.
-	 * GET /paperlayout/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
+	
+	public function update($departmentId, $patternId)
 	{
-		//
+		$pattern = Department::find($departmentId)->patterns()->where('id', $patternId);
+		$details = Input::all();
+
+		if($pattern)
+		{
+			if($pattern->update($details))
+		        return Response::json(['alert' => Messages::$updateSuccess.'pattern'], 200);
+		    else
+		       	return Response::json(['alert' => Messages::$updateFail.'pattern'], 500);
+		}
+		else
+			return Response::json(['alert' => 'Pattern'.Messages::$notFound], 404);
 	}
 
-	/**
-	 * Show the form for editing the specified resource.
-	 * GET /paperlayout/{id}/edit
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
+	
+	public function destroy($departmentId, $patternId)
 	{
-		//
-	}
+		$pattern = Department::find($departmentId)->patterns()->where('id', $patternId);
 
-	/**
-	 * Update the specified resource in storage.
-	 * PUT /paperlayout/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 * DELETE /paperlayout/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
+		if($pattern->delete())
+			return Response::json(['alert' => Messages::$deleteSuccess.'pattern']);
+		else
+			return Response::json(['alert' => Messages::$deleteFail.'pattern']);
 	}
 
 }

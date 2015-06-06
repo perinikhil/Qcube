@@ -14,7 +14,7 @@ class DepartmentController extends \BaseController {
 		if($existingUser = User::where('email', $departmentHead['email'])->first())
 		{
 			$existingUser->department_id = $department->id;
-			$existingUser->permissions = Permissions::addPermissions((string)$existingUser->permissions, 'd');
+			$existingUser->permissions = Permissions::addPermissions($existingUser->permissions, 'd');
 			if($existingUser->save())
 			{
 				return true;
@@ -87,8 +87,8 @@ class DepartmentController extends \BaseController {
 	
 		if($oldHead)	//swap permissions for the new and old hod
 		{
-			$newHead->permissions = Permissions::addPermissions((string)$newHead->permissions, 'd');
-			$oldHead->permissions = Permissions::removePermissions((string)$oldHead->permissions, 'd');
+			$newHead->permissions = Permissions::addPermissions($newHead->permissions, 'd');
+			$oldHead->permissions = Permissions::removePermissions($oldHead->permissions, 'd');
 			$newHead->department_id = $department->id;
 			if($oldHead->save() && $newHead->save())
 			{

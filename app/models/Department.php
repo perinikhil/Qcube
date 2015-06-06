@@ -13,6 +13,11 @@ class Department extends \Eloquent {
 		return $this->hasMany('Subject');
 	}
 
+	public function patterns()
+	{
+		return $this->hasMany('Pattern');
+	}
+
 	public function organization()
 	{
 		return $this->belongsTo('Organization');
