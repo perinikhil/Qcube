@@ -71,4 +71,11 @@ class SubjectController extends \BaseController {
 			return Response::json(['alert' => Messages::$deleteFail.'subject']);
 	}
 
+	public function getUnits($departmentId, $subjectId)
+	{
+		$units = Subject::find($subjectId)->questions()->lists('unit');
+		$units = array_values(array_unique($units));
+		return Response::json($units);
+	}
+
 }

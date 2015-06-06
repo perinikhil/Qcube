@@ -21,10 +21,20 @@ Route::group(array('prefix' => 'api'), function() {
     Route::resource('users', 'UserController', ['except' => ['create', 'edit']]);
 
     Route::resource('organizations', 'OrganizationController', ['except' => ['create', 'edit']]);
+  
+
     Route::resource('organizations.departments', 'DepartmentController', ['except' => ['create', 'edit']]);
+  
+
+    Route::get('departments/{departmentId}/subjects/{subjectId}/units', 'SubjectController@getUnits');
     Route::resource('departments.subjects', 'SubjectController', ['except' => ['create', 'edit']]);
+  
+
     Route::resource('departments.subjects.questions', 'QuestionController', ['except' => ['create', 'edit']]);
+  
+
     Route::resource('departments.subjects.questions.attachments', 'AttachmentController', ['except' => ['create', 'edit']]);
+
 
     Route::resource('departments.patterns', 'PatternController', ['except' => ['create', 'edit']]);
 
