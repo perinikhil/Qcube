@@ -1,7 +1,7 @@
 <?php
 
 class Question extends \Eloquent {
-	protected $fillable = ['subject_id', 'unit', 'question', 'marks', 'tags'];
+	protected $fillable = ['subject_id', 'unit', 'text', 'marks', 'tags'];
 
 	public static $rules = [
 		'subject_id' => 'required',
@@ -9,7 +9,7 @@ class Question extends \Eloquent {
 		'text' => 'required',
 		'marks' => 'required'
 	];
-	
+
 	public function subject()
 	{
 		return $this->belongsTo('Subject');

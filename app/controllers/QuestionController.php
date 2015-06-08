@@ -2,14 +2,14 @@
 
 class QuestionController extends \BaseController {
 
-	
+
 	public function index($departmentId, $subjectId)
 	{
 		$questions = Department::find($departmentId)->subjects()->find($subjectId)->questions;
 		return Response::json($questions);
 	}
 
-	
+
 	public function store($departmentId, $subjectId)
 	{
 		$details = Input::all();
@@ -19,7 +19,7 @@ class QuestionController extends \BaseController {
 
 		if($validate->fails())
 		{
-			return Responese::json(['alert' => Messages::$validateFail], 403);
+			return Response::json(['alert' => Messages::$validateFail], 403);
 		}
 		else
 		{
@@ -32,7 +32,7 @@ class QuestionController extends \BaseController {
 		}
 	}
 
-	
+
 	public function show($departmentId, $subjectId, $questionId)
 	{
 		// $question = Question::find($questionId);
@@ -44,7 +44,7 @@ class QuestionController extends \BaseController {
 			return Response::json(['alert' => 'Question'.Messages::$notFound], 404);
 	}
 
-	
+
 	public function update($departmentId, $subjectId, $questionId)
 	{
 		$question = Department::find($departmentId)->subjects()->find($subjectId)->questions()->find($questionId);
@@ -62,7 +62,7 @@ class QuestionController extends \BaseController {
 			return Response::json(['alert' => Messages::$notFound], 404);
 	}
 
-	
+
 	public function destroy($departmentId, $subjectId, $questionId)
 	{
 		$question = Department::find($departmentId)->subjects()->find($subjectId)->questions()->find($questionId);
