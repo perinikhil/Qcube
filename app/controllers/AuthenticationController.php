@@ -1,6 +1,6 @@
 <?php
 
-class AuthenticationController extends \BaseController 
+class AuthenticationController extends \BaseController
 {
 
 	public function login()
@@ -23,7 +23,8 @@ class AuthenticationController extends \BaseController
 			$credentials = Input::only('email','password');
 
 			if (Auth::attempt($credentials))
-				return Response::json([	'alert' => Messages::$loginSuccess],
+				return Response::json(['user' => Auth::user(),
+					'alert' => Messages::$loginSuccess],
 					200);
 			else
 				return Response::json(['alert' => Messages::$loginFail],

@@ -10,10 +10,10 @@ class Messages {
 	public static $deleteFail = 'Failed to delete ';
 
 	public static $notFound = ' not found!';
-	public static $validateFail = 'Validations have failed!';
+	public static $validateFail = 'Validations have failed';
 
-	public static $loginSuccess = 'Logged-in';
+	public static $loginSuccess = 'Logged In';
 	public static $loginFail = 'Username or Password incorrect';
-	public static $logoutSuccess = 'Logged-out';
+	public static $logoutSuccess = 'Logged Out';
 	public static $logoutFail = 'Failed to logout';
 }
