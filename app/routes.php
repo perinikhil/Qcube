@@ -1,14 +1,5 @@
 <?php
 
-Route::get('/', function() {
-    return View::make('hello');
-});
-
-Route::get('/hello', function() {
-    $str = Auth::user()->email;
-	return Response::json([$str], 200);
-});
-
 Route::group(array('prefix' => 'api'), function() {
 
     Route::post('login','AuthenticationController@login');

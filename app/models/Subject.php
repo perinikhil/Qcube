@@ -1,7 +1,7 @@
 <?php
 
 class Subject extends \Eloquent {
-	protected $fillable = ['department_id', 'name', 'subject_code', 'sem'];
+	protected $fillable = ['department_id', 'name', 'abbr', 'subject_code', 'semester'];
 
 	public static $rules = [
 		'department_id' => 'required',
