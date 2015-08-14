@@ -8,7 +8,7 @@ class DepartmentController extends \BaseController {
 		return Response::json($departments);
 	}
 
-	
+
 	public static function storeDepartmentHead($departmentHead, $department)
 	{
 		if($existingUser = User::where('email', $departmentHead['email'])->first())
@@ -18,7 +18,7 @@ class DepartmentController extends \BaseController {
 			if($existingUser->save())
 			{
 				return true;
-				
+
 			}
 			else
 				return false;
@@ -68,7 +68,7 @@ class DepartmentController extends \BaseController {
 	   	}
 	}
 
-	
+
 	public function show($organizationId, $id)
 	{
 		$department = Organization::find($organizationId)->departments()->where('id', $id)->get();
@@ -76,15 +76,15 @@ class DepartmentController extends \BaseController {
 			return Response::json($department);
 		else
 			return Response::json(['alert' => 'Department'.Messages::$notFound]);
-		
+
 	}
 
-	
+
 	public static function updateDepartmentHead($departmentHead, $department)
 	{
 		$newHead = User::where('email', $departmentHead['email'])->first();
 		$oldHead = User::where('department_id', $department->id)->where('permissions', 'LIKE', '%d%')->first();
-	
+
 		if($oldHead)	//swap permissions for the new and old hod
 		{
 			$newHead->permissions = Permissions::addPermissions($newHead->permissions, 'd');
@@ -127,7 +127,7 @@ class DepartmentController extends \BaseController {
 	{
 		$department = Organization::find($organizationId)->departments()->find($id);
 		$details = Input::except('department_head');
-		
+
 		if($department)
 		{
 			if($department->update($details))
@@ -150,7 +150,7 @@ class DepartmentController extends \BaseController {
 	        return Response::json(['alert' => 'Department'.Messages::$notFound], 404);
 	}
 
-	
+
 	public function destroy($organizationId, $id)
 	{
 		$department = Organization::find($organizationId)->departments()->where('id', $id);

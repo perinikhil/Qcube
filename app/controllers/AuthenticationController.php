@@ -1,6 +1,6 @@
 <?php
 
-class AuthenticationController extends \BaseController 
+class AuthenticationController extends \BaseController
 {
 
 	public function login()
@@ -22,8 +22,10 @@ class AuthenticationController extends \BaseController
 		{
 			$credentials = Input::only('email','password');
 
+			if(Auth::check())
+				return Response::json(['alert' => Messages::$alreadyLoggedIn]);
 			if (Auth::attempt($credentials))
-				return Response::json([	'alert' => Messages::$loginSuccess],
+				return Response::json(['alert' => Messages::$loginSuccess],
 					200);
 			else
 				return Response::json(['alert' => Messages::$loginFail],
@@ -33,11 +35,14 @@ class AuthenticationController extends \BaseController
 
 	public function logout()
 	{
-			if(Auth::logout())
-				return Response::json(['alert' => Messages::$logoutSuccess],
-					200);
-			else
-				return Response::json(['alert' => Messages::$logoutFail],
-					500);
+		if(Auth::check())
+		{
+			Auth::logout();
+			return Response::json(['alert' => Messages::$logoutSuccess],
+				200);
+		}
+		else
+			return Response::json(['alert' => Messages::$logoutFail],
+				500);
 	}
 }
