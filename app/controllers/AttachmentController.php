@@ -26,22 +26,22 @@ class AttachmentController extends \BaseController {
 	        {
 	        	if(Attachment::create($details))
 	        	{
-	        		return Response::json(['alert' => Messages::$uploadSuccess.'attachment']);
+	        		return Response::json(['alert' => Messages::$uploadSuccess.'attachment'], 200);
 	        	}
 	        	else
 	        	{
 	        		File::delete($destinationPath.$fileName);
-	        		return Response::json(['alert' => Messages::$uploadFail.'attachment']);
+	        		return Response::json(['alert' => Messages::$uploadFail.'attachment'], 500);
 	        	}
 	        }
 	        else
 	        {
-						return Response::json(['alert' => Messages::$uploadFail.'attachment']);
+						return Response::json(['alert' => Messages::$uploadFail.'attachment'], 500);
 					}
 		}
 		else
 		{
-			return Response::json(['alert' => 'No attachment found']);
+			return Response::json(['alert' => 'No attachment found'], 403);
 		}
 	}
 
@@ -56,16 +56,16 @@ class AttachmentController extends \BaseController {
 			if($attachment->delete())
 			{
 				File::delete($fileName);
-				return Response::json(['alert' => Messages::$deleteSuccess.'attachment']);
+				return Response::json(['alert' => Messages::$deleteSuccess.'attachment'], 200);
 			}
 			else
 			{
-				return Response::json(['alert' => Messages::$deleteFail.'attachment']);
+				return Response::json(['alert' => Messages::$deleteFail.'attachment'], 500);
 			}
 		}
 		else
 		{
-			return Response::json(['alert' => 'Attachment not found']);
+			return Response::json(['alert' => 'Attachment not found'], 404);
 		}
 	}
 }
