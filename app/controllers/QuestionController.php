@@ -6,6 +6,10 @@ class QuestionController extends \BaseController {
 	public function index($departmentId, $subjectId)
 	{
 		$questions = Department::find($departmentId)->subjects()->find($subjectId)->questions;
+		foreach($questions as $question)
+		{
+			$question->attachment = Attachment::where('question_id', $question->id)->first();
+		}
 		return Response::json($questions);
 	}
 
@@ -39,7 +43,10 @@ class QuestionController extends \BaseController {
 		$question = Department::find($departmentId)->subjects()->find($subjectId)->questions()->find($questionId);
 
 		if($question)
+		{
+			$question->attachment = Attachment::where('question_id', $question->id)->first();
 			return Response::json($question);
+		}
 		else
 			return Response::json(['alert' => 'Question'.Messages::$notFound], 404);
 	}
