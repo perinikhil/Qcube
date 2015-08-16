@@ -17,7 +17,7 @@ class AttachmentController extends \BaseController {
 
 		if(Input::hasFile('attachment'))
 		{
-			if($hasAttachment = Attachment::where('question_id', $question_id)->first())
+			if($hasAttachment = Attachment::where('question_id', $questionId)->first())
 			{
 				self::destroy($departmentId, $subjectId, $questionId, $hasAttachment->id);
 			}
