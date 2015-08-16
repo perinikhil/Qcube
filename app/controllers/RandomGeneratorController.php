@@ -57,7 +57,7 @@ class RandomGeneratorController extends \BaseController {
 		do
 		{
 			$remainingMarks = $totalMarks;
-		
+
 			$i = 0;
 			$pickedQuestions = [];
 			$pickedQuestionIds = [];
@@ -131,7 +131,7 @@ class RandomGeneratorController extends \BaseController {
 		do
 		{
 			$remainingMarks = $totalMarks;
-		
+
 			$i = 0;
 			$pickedQuestions = [];
 			$pickedQuestionIds = [];
@@ -140,11 +140,13 @@ class RandomGeneratorController extends \BaseController {
 			{
 				if(sizeof($pickedQuestions) == 0)
 				{
-					$question = Question::where('subject_id', $subjectId)->where('unit', $unit)->where('marks', '<=', $remainingMarks)->get()->random(1);
+					$question = Question::where('subject_id', $subjectId)->where('unit', $unit)
+						->where('marks', '<=', $remainingMarks)->get()->random(1);
 				}
 				else
 				{
-					$question = Question::where('subject_id', $subjectId)->where('unit', $unit)->where('marks', '<=', $remainingMarks)->whereNotIn('id', $pickedQuestionIds)->get()->random(1);
+					$question = Question::where('subject_id', $subjectId)->where('unit', $unit)
+						->where('marks', '<=', $remainingMarks)->whereNotIn('id', $pickedQuestionIds)->get()->random(1);
 				}
 
 				$pickedQuestions[$i] = $question;

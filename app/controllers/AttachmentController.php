@@ -20,7 +20,7 @@ class AttachmentController extends \BaseController {
 			$file = Input::file('attachment');
 	        $extension = $file->getClientOriginalExtension();
 	        $fileName = $questionId . '_' . str_random(16) . '.' . $extension;
-	        $destinationPath = 'uploads/attachments';
+	        $destinationPath = app_path() . 'uploads/attachments';
 	        $details['path'] = $fileName;
 	        if(($file->move($destinationPath, $fileName)))
 	        {
@@ -51,7 +51,7 @@ class AttachmentController extends \BaseController {
 
 		if($attachment)
 		{
-			$destinationPath = 'uploads/attachments/';
+			$destinationPath = app_path().'uploads/attachments/';
 			$fileName = $destinationPath . $attachment->path;
 			if($attachment->delete())
 			{
