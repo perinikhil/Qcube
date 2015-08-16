@@ -17,6 +17,10 @@ class AttachmentController extends \BaseController {
 
 		if(Input::hasFile('attachment'))
 		{
+			if($hasAttachment = Attachment::where('question_id', $question_id)->first())
+			{
+				self::destroy($departmentId, $subjectId, $questionId, $hasAttachment->id);
+			}
 			$file = Input::file('attachment');
 	        $extension = $file->getClientOriginalExtension();
 	        $fileName = $questionId . '_' . str_random(16) . '.' . $extension;
@@ -74,7 +78,7 @@ class AttachmentController extends \BaseController {
 	// {
 	// 	$attachment = Department::find($departmentId)->subjects()->find($subjectId)->questions()->find($questionId)->attachments()->find($attachmentId);
 	// 	$oldAttachment = $attachment;
-	// 	$destinationPath = 'uploads/attachments';
+	// 	$destinationPath = app_path().'/uploads/attachments';
 	//
 	// 	if($attachment)
 	// 	{
@@ -89,17 +93,17 @@ class AttachmentController extends \BaseController {
 	// 	        	if($attachment->update($details))
 	// 	        	{
 	// 	        		File::delete($destinationPath.$oldAttachment->path);
-	// 	        		return Response::json(['alert' => 'Sucessfully uploaded attachment']);
+	// 	        		return Response::json(['alert' => 'Sucessfully uploaded attachment'], 200);
 	// 	        	}
 	// 	        	else
 	// 	        	{
 	// 	        		File::delete($destinationPath.$newFileName);
-	// 	        		return Response::json(['alert' => 'Failed to update attachment']);
+	// 	        		return Response::json(['alert' => 'Failed to update attachment'], 500);
 	// 	        	}
 	// 	        }
 	// 	        else
 	// 	        {
-	// 	        	return Response::json(['alert' => 'Failed to upload attachment']);
+	// 	        	return Response::json(['alert' => 'Failed to upload attachment'], 404);
 	// 	        }
 	// 		}
 	// 	}
