@@ -28,11 +28,20 @@ class QuestionController extends \BaseController {
 		else
 		{
 			if($question = Question::create($details))
-	        	return Response::json(['question' => $question,
-	        		'alert' => Messages::$createSuccess.'question'],
-	        		200);
-	        else
-	        	return Response::json(['alert' => Messages::$createFail.'question'], 500);
+	    {
+				if(Input::has('attachment'))
+				{
+					if(self::storeAttachment($departmentId, $subjectId, $question->id))
+						return Response::json(['question' => $question,
+							'alert' => Messages::$createSuccess.'question'],
+							200);
+				}
+				return Response::json(['question' => $question,
+      		'alert' => Messages::$createSuccess.'question'],
+      		200);
+	    }
+			else
+	    	return Response::json(['alert' => Messages::$createFail.'question'], 500);
 		}
 	}
 
@@ -61,9 +70,17 @@ class QuestionController extends \BaseController {
 		if($question)
 		{
 			if($question->update($details))
-	        	return Response::json(['alert' => Messages::$updateSuccess.'question'], 200);
-	        else
-	        	return Response::json(['alert' => Messages::$updateFail.'question'], 500);
+			{
+				if(Input::has('attachment'))
+				{
+					if(self::storeAttachment($departmentId, $subjectId, $question->id))
+						return Response::json(['alert' => Messages::$updateSuccess.'question'],
+							200);
+				}
+	      return Response::json(['alert' => Messages::$updateSuccess.'question'], 200);
+      }
+			else
+      	return Response::json(['alert' => Messages::$updateFail.'question'], 500);
 		}
 		else
 			return Response::json(['alert' => Messages::$notFound], 404);
@@ -84,5 +101,36 @@ class QuestionController extends \BaseController {
 		else
 			return Response::json(['alert' => Messages::$notFound], 404);
 	}
+
+
+	public function storeAttachment($departmentId, $subjectId, $questionId)
+	{
+		if($hasAttachment = Attachment::where('question_id', $questionId)->first())
+		{
+			AttachmentController::destroy($departmentId, $subjectId, $questionId, $hasAttachment->id);
+		}
+		$file = Input::file('attachment');
+		$extension = $file->getClientOriginalExtension();
+		$fileName = $questionId . '_' . str_random(16) . '.' . $extension;
+		$destinationPath = app_path() . '/uploads/attachments';
+		$details['path'] = $fileName;
+		if(($file->move($destinationPath, $fileName)))
+		{
+			if(Attachment::create($details))
+			{
+				return true;
+			}
+			else
+			{
+				File::delete($destinationPath.$fileName);
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 
 }

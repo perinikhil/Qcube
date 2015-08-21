@@ -1,6 +1,6 @@
 <?php
 
-class Permissions 
+class Permissions
 {
 	public static function addPermissions($permissions, $permToAdd)
 	{
@@ -14,4 +14,6 @@ class Permissions
 		$permissions = str_replace($permToRemove, '', $permissions);
 		return $permissions;
 	}
+
+	public static function checkPermissions($permissions, )
 }

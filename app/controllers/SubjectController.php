@@ -8,7 +8,7 @@ class SubjectController extends \BaseController {
 		return Response::json($subjects);
 	}
 
-	
+
 	public function store($departmentId)
 	{
 		$details = Input::all();
@@ -18,7 +18,7 @@ class SubjectController extends \BaseController {
 
 		if($validate->fails())
 		{
-			return Response::json(['alert' => Messages::$validateFail, 
+			return Response::json(['alert' => Messages::$validateFail,
 				'messages' => $validate->messages()],
 				403);
 		}
@@ -33,7 +33,7 @@ class SubjectController extends \BaseController {
 		}
 	}
 
-	
+
 	public function show($departmentId, $subjectId)
 	{
 		$subject = Department::find($departmentId)->subjects()->where('id', $subjectId)->get();
@@ -43,7 +43,7 @@ class SubjectController extends \BaseController {
 			return Response::json(['alert' => 'Subject'.Messages::$notFound], 404);
 	}
 
-	
+
 	public function update($departmentId, $subjectId)
 	{
 		$subject = Department::find($departmentId)->subjects()->where('id', $subjectId);
@@ -60,7 +60,7 @@ class SubjectController extends \BaseController {
 			return Response::json(['alert' => 'Subject'.Messages::$notFound], 404);
 	}
 
-	
+
 	public function destroy($departmentId, $subjectId)
 	{
 		$subject = Department::find($departmentId)->subjects()->where('id', $subjectId);

@@ -16,10 +16,11 @@ Route::group(array('prefix' => 'api'), function() {
 
 
     Route::resource('organizations.departments', 'DepartmentController', ['except' => ['create', 'edit']]);
+    Route::get('organizations/{organizationId}/departments/{departmentId}/candidates', 'DepartmentController@candidates');
 
 
-    Route::get('departments/{departmentId}/subjects/{subjectId}/units', 'SubjectController@getUnits');
     Route::resource('departments.subjects', 'SubjectController', ['except' => ['create', 'edit']]);
+    Route::get('organizations/{organizationId}/departments/{departmentId}/subjects/{subjectId}/units', 'SubjectController@getUnits');
 
 
     Route::resource('departments.subjects.questions', 'QuestionController', ['except' => ['create', 'edit']]);
