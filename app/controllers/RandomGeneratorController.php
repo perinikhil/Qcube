@@ -2,111 +2,51 @@
 
 class RandomGeneratorController extends \BaseController {
 
-	public function randomQuestions($subjectId)
+	private static $allPickedQuestions;
+	private static $allPickedQuestionIds;
+	private static $i;
+
+	public function generate($subjectId)
 	{
-		// $subjectId = Input::get('subject_id');
-		$unit = Input::get('unit');
-		$totalMarks = Input::get('marks');
-		// if(Input::has('numberOfQuestions'))
-		$numberOfQuestions = Input::get('numberOfQuestions');
-		// else
-		// 	return Redirect::to('random-main')
-		// 				->with(Input::all());
+		self::$i = 0;
+		self::$allPickedQuestions = [];
+		self::$allPickedQuestionIds = [];
 
-		$countDistinctMarks = [];
-		$i = 0;
-
-		$allMarks = Question::select('marks')->get();
-		$length = sizeof($allMarks)/sizeof($allMarks[0]);
-
-		$answer = self::randomQuestionsSumOfSubsets($allMarks, $length, $totalMarks, $numberOfQuestions);
-		// print_r($answer);
-
-		if($answer == true)
+		$paper = Input::get('paper_data');
+		foreach($paper as &$requirement)
 		{
-			$questions = self::pickRandomQuestions($subjectId, $unit, $totalMarks, $numberOfQuestions);
-			return Response::json($questions);
+			$requirement = (object)$requirement;
+			// $requirement->question = [];
+			if(!($requirement->questions = self::randomMain($subjectId, $requirement->units, $requirement->marks)))
+				return Response::json(['alert' => 'Insufficient questions'], 404);
 		}
+		unset($requirement);
+		return Response::json($paper);
+	}
+
+	public function randomMain($subjectId, $units, $totalMarks)
+	{
+		// $countDistinctMarks = [];
+
+		if(self::$i == 0)
+			$allMarks = Question::select('marks')->where('subject_id', $subjectId)->whereIn('unit', $units)->get();
 		else
-		{
-			return Response::json(['success' => 'failed',
-									'alert' => 'Warning! Cannot find any subset of questions for given marks']);
-		}
-	}
+			$allMarks = Question::select('marks')->where('subject_id', $subjectId)->whereIn('unit', $units)->whereNotIn('id', self::$allPickedQuestionIds)->get();
 
-	private function randomQuestionsSumOfSubsets($set, $n, $sum, $numberOfQuestions)
-	{
-
-		if($sum == 0 && $numberOfQuestions == 0)
-			return true;
-		else if($sum == 0 && $numberOfQuestions != 0)
-			return false;
-		else if($n == 0 && $sum > 0)
-			return false;
-		else if($set[$n-1]->marks > $sum)
-			return self::randomQuestionsSumOfSubsets($set, $n-1, $sum, $numberOfQuestions);
-		else
-			return (self::randomQuestionsSumOfSubsets($set, $n-1, $sum - $set[$n-1]->marks, $numberOfQuestions-1) || self::randomQuestionsSumOfSubsets($set, $n-1, $sum, $numberOfQuestions));
-
-	}
-
-	private function pickRandomQuestions($subjectId, $unit, $totalMarks, $numberOfQuestions)
-	{
-		$pickedQuestions = [];
-
-		do
-		{
-			$remainingMarks = $totalMarks;
-
-			$i = 0;
-			$pickedQuestions = [];
-			$pickedQuestionIds = [];
-
-			while($remainingMarks > 0 && sizeof($pickedQuestionIds) < $numberOfQuestions)
-			{
-				if(sizeof($pickedQuestions) == 0)
-				{
-					$question = Question::where('subject_id', $subjectId)->where('marks', '<=', $remainingMarks)->get()->random(1);
-				}
-				else
-				{
-					$question = Question::where('subject_id', $subjectId)->where('marks', '<=', $remainingMarks)->whereNotIn('id', $pickedQuestionIds)->get()->random(1);
-				}
-
-				$pickedQuestions[$i] = $question;
-				$pickedQuestionIds[$i] = $question['id'];
-				$remainingMarks -= $question['marks'];
-				$i++;
-			}
-		}while(!($remainingMarks == 0 && sizeof($pickedQuestionIds) == $numberOfQuestions));
-
-		return $pickedQuestions;
-	}
-
-	public function randomMain($subjectId)
-	{
-		// $subjectId = Input::get('subject_id');
-		$unit = Input::get('unit');
-		$totalMarks = Input::get('marks');
-
-		$countDistinctMarks = [];
-		$i = 0;
-
-		$allMarks = Question::select('marks')->get();
+		if(count($allMarks) == 0)	return false;
 		$length = sizeof($allMarks)/sizeof($allMarks[0]);
 
 		$answer = self::randomMainSumOfSubsets($allMarks, $length, $totalMarks);
-		// print_r($answer);
+		// return $answer;
 
 		if($answer == true)
 		{
-			$questions = self::pickRandomMain($subjectId, $unit, $totalMarks);
-			return Response::json($questions);
+			$questions = self::pickRandomMain($subjectId, $units, $totalMarks);
+			return $questions;
 		}
 		else
 		{
-			return Response::json(['success' => 'failed',
-									'alert' => 'Warning! Cannot find any subset of questions for given marks']);
+			return false;
 		}
 	}
 
@@ -124,38 +64,37 @@ class RandomGeneratorController extends \BaseController {
 
 	}
 
-	private function pickRandomMain($subjectId, $unit, $totalMarks)
+	private function pickRandomMain($subjectId, $units, $totalMarks)
 	{
-		$pickedQuestions = [];
-
+		$curPickedQuestions = [];
+		$j=0;
 		do
 		{
 			$remainingMarks = $totalMarks;
 
-			$i = 0;
-			$pickedQuestions = [];
-			$pickedQuestionIds = [];
-
 			while($remainingMarks > 0)
 			{
-				if(sizeof($pickedQuestions) == 0)
+				if(sizeof(self::$allPickedQuestions) == 0)
 				{
-					$question = Question::where('subject_id', $subjectId)->where('unit', $unit)
+					$question = Question::where('subject_id', $subjectId)->whereIn('unit', $units)
 						->where('marks', '<=', $remainingMarks)->get()->random(1);
+					$question->attachments = $question->attachments;
 				}
 				else
 				{
-					$question = Question::where('subject_id', $subjectId)->where('unit', $unit)
-						->where('marks', '<=', $remainingMarks)->whereNotIn('id', $pickedQuestionIds)->get()->random(1);
+					$question = Question::where('subject_id', $subjectId)->whereIn('unit', $units)
+						->where('marks', '<=', $remainingMarks)->whereNotIn('id', self::$allPickedQuestionIds)->get()->random(1);
+					$question->attachments = $question->attachments;
 				}
 
-				$pickedQuestions[$i] = $question;
-				$pickedQuestionIds[$i] = $question['id'];
+				self::$allPickedQuestions[self::$i] = $question;
+				self::$allPickedQuestionIds[self::$i] = $question['id'];
+				$curPickedQuestions[$j++] = $question;
 				$remainingMarks -= $question['marks'];
-				$i++;
+				self::$i+=1;
 			}
 		}while(!($remainingMarks == 0));
 
-		return $pickedQuestions;
+		return $curPickedQuestions;
 	}
 }
