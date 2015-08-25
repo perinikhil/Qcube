@@ -2,6 +2,7 @@
 
 class Permissions
 {
+
 	public static function addPermissions($permissions, $permToAdd)
 	{
 		if(strstr($permissions, $permToAdd) === false)
@@ -15,5 +16,4 @@ class Permissions
 		return $permissions;
 	}
 
-	public static function checkPermissions($permissions, )
 }

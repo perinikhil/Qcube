@@ -15,7 +15,7 @@ class DepartmentController extends \BaseController {
 
 	public function store($organizationId)
 	{
-		$validate  = Validator::make(Input::all(), Department::$rules);
+		$validate = Validator::make(Input::all(), Department::$rules);
 
 		if($validate->fails())
 		{
@@ -42,17 +42,14 @@ class DepartmentController extends \BaseController {
 	   	}
 	}
 
-	public static function storeDepartmentHead($departmentHead, $department)
+	public static function storeDepartmentHead($departmentHeadEmail, $department)
 	{
-		if($existingUser = User::where('email', $departmentHead['email'])->first())
+		if($existingUser = User::where('email', $departmentHeadEmail)->first())
 		{
 			$existingUser->department_id = $department->id;
 			$existingUser->permissions = Permissions::addPermissions($existingUser->permissions, 'd');
 			if($existingUser->save())
-			{
 				return true;
-
-			}
 			else
 				return false;
 		}
@@ -111,12 +108,17 @@ class DepartmentController extends \BaseController {
 	}
 
 
-	public static function updateDepartmentHead($departmentHead, $department)
+	public static function updateDepartmentHead($departmentHeadEmail, $department)
 	{
-		$newHead = User::where('email', $departmentHead['email'])->first();
+		//swap permissions for the new and old hod
+		$newHead = User::where('email', $departmentHeadEmail)->first();
 		$oldHead = User::where('department_id', $department->id)->where('permissions', 'LIKE', '%d%')->first();
 
-		if($oldHead)	//swap permissions for the new and old hod
+		if(!$newHead)
+			if(self::storeDepartmentHead($departmentHeadEmail, $department))
+				$newHead = User::where('email', $departmentHeadEmail)->first();
+
+		if($oldHead)
 		{
 			$newHead->permissions = Permissions::addPermissions($newHead->permissions, 'd');
 			$oldHead->permissions = Permissions::removePermissions($oldHead->permissions, 'd');
