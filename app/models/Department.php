@@ -5,7 +5,7 @@ class Department extends \Eloquent {
 	protected $fillable = ['name', 'abbr', 'organization_id'];
 
 	public static $rules = [
-		'name' => 'required'
+		// 'name' => 'required'
 	];
 
 	public function subjects()

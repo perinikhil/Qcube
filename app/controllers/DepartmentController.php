@@ -55,16 +55,16 @@ class DepartmentController extends \BaseController {
 		}
 		else
 		{
-			$details['name'] = $departmentHead['name'];
-			$details['email'] = $departmentHead['email'];
+			$details['name'] = explode('@', $departmentHeadEmail)[0];
+			$details['email'] = $departmentHeadEmail;
 			$details['password'] = Hash::make('changeme');
 			$details['permissions'] = 'd';
 			$details['department_id'] = $department->id;
 			$details['organization_id'] = Auth::user()->organization_id;
 			if($user = User::create($details))
 				return true;
-	        else
-	        	return false;
+	    else
+	    	return false;
 
 		}
 	}
@@ -142,8 +142,8 @@ class DepartmentController extends \BaseController {
 		}
 		else
 		{
-			$details['name'] = $departmentHead['name'];
-			$details['email'] = $departmentHead['email'];
+			$details['name'] = explode('@', $departmentHeadEmail)[0];
+			$details['email'] = $departmentHeadEmail;
 			$details['password'] = Hash::make('changeme');
 			$details['permissions'] = 'd';
 			$details['department_id'] = $department->id;
