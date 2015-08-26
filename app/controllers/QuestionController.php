@@ -107,7 +107,11 @@ class QuestionController extends \BaseController {
 	{
 		if($hasAttachment = Attachment::where('question_id', $questionId)->first())
 		{
-			AttachmentController::destroy($departmentId, $subjectId, $questionId, $hasAttachment->id);
+			$destinationPath = app_path().'/uploads/attachments/';
+			$fileName = $destinationPath . $hasAttachment->path;
+			if($hasAttachment->delete())
+				File::delete($fileName);
+			else return false;
 		}
 		$file = Input::file('attachment');
 		$extension = $file->getClientOriginalExtension();
