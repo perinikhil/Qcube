@@ -6,7 +6,7 @@ class RandomGeneratorController extends \BaseController {
 	private static $allPickedQuestionIds;
 	private static $i;
 
-	public function generate($subjectId)
+	public function generate($departmentId, $subjectId)
 	{
 		self::$i = 0;
 		self::$allPickedQuestions = [];

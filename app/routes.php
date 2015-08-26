@@ -9,7 +9,7 @@ Route::group(array('prefix' => 'api'), function() {
     // specify number of random questions required
     // Route::get('departments/{departmentId}/subjects/{subjectId}/random-questions', ['as' => 'random-questions', 'uses' => 'RandomGeneratorController@randomQuestions']);
     // Route::get('departments/{departmentId}/subjects/{subjectId}/random-main', ['as' => 'random-main', 'uses' => 'RandomGeneratorController@randomMain']);
-    Route::post('organizations/{organizationId}/departments/{departmentId}/subjects/{subjectId}/generate', ['as' => 'generate', 'uses' => 'RandomGeneratorController@generate']);
+    Route::post('departments/{departmentId}/subjects/{subjectId}/generate', ['as' => 'generate', 'uses' => 'RandomGeneratorController@generate']);
 
     Route::resource('users', 'UserController', ['except' => ['create', 'edit']]);
 
