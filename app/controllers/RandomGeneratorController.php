@@ -12,15 +12,34 @@ class RandomGeneratorController extends \BaseController {
 		self::$allPickedQuestions = [];
 		self::$allPickedQuestionIds = [];
 
-		$paper = Input::get('paper_data');
-		foreach($paper as &$requirement)
+		$paperRequirement = Input::get('paper_data');
+		$noSections = Input::get('pattern')['noSections'];
+		$noQuestionsPerMain = Input::get('pattern')['marksPerMain'];
+		$noQuestionsPerMain = explode('|', $noQuestionsPerMain);
+		foreach($noQuestionsPerMain as &$marks)
 		{
-			$requirement = (object)$requirement;
-			// $requirement->question = [];
-			if(!($requirement->questions = self::randomMain($subjectId, $requirement->units, $requirement->marks)))
-				return Response::json(['alert' => 'Insufficient questions'], 404);
+			$marks = explode(',', $marks);
+			$marks = count($marks);
 		}
-		unset($requirement);
+		unset($marks);
+		// return Response::json($noQuestionsPerMain);
+		$paper = [];
+		for($i=0; $i<$noSections; $i++)
+		{
+			for($j=0; $j<$noQuestionsPerMain[$i]; $j++)
+			{
+				if(!($paper[$i][$j] = self::randomMain($subjectId, $paperRequirement[$i*$noSections+$j]['units'],
+					$paperRequirement[$i*$noSections+$j]['marks'])))
+						return Response::json(['alert' => 'Insufficient questions'], 404);
+			}
+		}
+		// foreach($paperRequirement as &$requirement)
+		// {
+		// 	$requirement = (object)$requirement;
+		// 	// $requirement->question = [];
+		// 	if(!($requirement->questions = self::randomMain($subjectId, $requirement->units, $requirement->marks)))
+		// }
+		// unset($requirement);
 		return Response::json($paper);
 	}
 
