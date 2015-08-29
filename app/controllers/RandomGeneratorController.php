@@ -8,39 +8,57 @@ class RandomGeneratorController extends \BaseController {
 
 	public function generate($departmentId, $subjectId)
 	{
-		self::$i = 0;
-		self::$allPickedQuestions = [];
-		self::$allPickedQuestionIds = [];
-
 		$paperRequirement = Input::get('paper_data');
-		$noSections = Input::get('pattern')['no_sections'];
-		$noQuestionsPerMain = Input::get('pattern')['marks_mains'];
-		$noQuestionsPerMain = explode('|', $noQuestionsPerMain);
-		foreach($noQuestionsPerMain as &$marks)
+		$pattern = Input::get('pattern');
+		$noSections = $pattern['no_sections'];
+		$noQuestionsPerSection = $pattern['marks_mains'];
+
+		$noQuestionsPerSection = explode('|', $noQuestionsPerSection);
+
+		foreach($noQuestionsPerSection as &$marks)
 		{
 			$marks = explode(',', $marks);
 			$marks = count($marks);
 		}
 		unset($marks);
-		// return Response::json($noQuestionsPerMain);
+		// return Response::json($noQuestionsPerSection);
+// retry:
 		$paper = [];
-		for($i=0; $i<$noSections; $i++)
+		$flag=false;						//flag sets to false if there are insufficient questions
+		$m=0;
+		while($flag==false && $m<100)
 		{
-			for($j=0; $j<$noQuestionsPerMain[$i]; $j++)
+			self::$i = 0;
+			self::$allPickedQuestions = [];
+			self::$allPickedQuestionIds = [];
+
+			$flag=true;
+			$paper = [];
+			$k=0;
+			for($i=0; $i<$noSections; $i++)
 			{
-				if(!($paper[$i][$j] = self::randomMain($subjectId, $paperRequirement[$i*$noSections+$j]['units'],
-					$paperRequirement[$i*$noSections+$j]['marks'])))
-						return Response::json(['alert' => 'Insufficient questions'], 404);
+				for($j=0; $j<$noQuestionsPerSection[$i]; $j++)
+				{
+					if(!($paper[$i][$j] = self::randomMain($subjectId, $paperRequirement[$k]['units'],
+						$paperRequirement[$k]['marks'])))
+						{
+							$flag=false;
+							// break;
+							// if($flag>50)
+							// else goto retry;
+						}
+					$k++;
+				}
 			}
+			// return Response::json($paper);
+			$m++;
 		}
-		// foreach($paperRequirement as &$requirement)
-		// {
-		// 	$requirement = (object)$requirement;
-		// 	// $requirement->question = [];
-		// 	if(!($requirement->questions = self::randomMain($subjectId, $requirement->units, $requirement->marks)))
-		// }
-		// unset($requirement);
-		return Response::json($paper);
+		// return Response::json([$m,$flag]);
+		// if($m<100 && $flag == true)
+		if($flag)
+			return Response::json($paper);
+		else
+			return Response::json(['alert' => 'Insufficient questions'], 404);
 	}
 
 	public function randomMain($subjectId, $units, $totalMarks)
