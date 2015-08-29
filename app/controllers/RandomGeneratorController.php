@@ -13,8 +13,8 @@ class RandomGeneratorController extends \BaseController {
 		self::$allPickedQuestionIds = [];
 
 		$paperRequirement = Input::get('paper_data');
-		$noSections = Input::get('pattern')['noSections'];
-		$noQuestionsPerMain = Input::get('pattern')['marksPerMain'];
+		$noSections = Input::get('pattern')['no_sections'];
+		$noQuestionsPerMain = Input::get('pattern')['marks_mains'];
 		$noQuestionsPerMain = explode('|', $noQuestionsPerMain);
 		foreach($noQuestionsPerMain as &$marks)
 		{
