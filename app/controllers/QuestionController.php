@@ -114,7 +114,7 @@ class QuestionController extends \BaseController {
 			else return false;
 		}
 		$file = Input::file('attachment');
-		$extension = $file->getClientOriginalExtension();
+		$extension = Input::file('attachment')->getClientOriginalExtension();
 		$fileName = $questionId . '_' . str_random(16) . '.' . $extension;
 		$destinationPath = app_path() . '/uploads/attachments';
 		$details['path'] = $fileName;

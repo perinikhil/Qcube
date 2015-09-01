@@ -8,7 +8,7 @@ class UserController extends \BaseController {
 		return Response::json($users);
 	}
 
-	
+
 	public function store()
 	{
 		$validate = Validator::make(Input::all(), User::$storeRules);
@@ -22,17 +22,19 @@ class UserController extends \BaseController {
 		{
 			$details = Input::all();
 			$details['password'] = Hash::make('changeme');
-			$details['department_id'] = Auth::user()->department_id;
-			$details['organization_id'] = Auth::user()->organization_id;
-
-		    if(User::create($details))
-	        	return Response::json(['alert' => Messages::$createSuccess.'user'], 200);
-	        else
-	        	return Response::json(['alert' => Messages::$createFail.'user'], 500);
+			if(Auth::check())
+			{
+				$details['department_id'] = Auth::user()->department_id;
+				$details['organization_id'] = Auth::user()->organization_id;
+			}
+	    if(User::create($details))
+        	return Response::json(['alert' => Messages::$createSuccess.'user'], 200);
+        else
+        	return Response::json(['alert' => Messages::$createFail.'user'], 500);
 	   	}
 	}
 
-	
+
 	public function show($id)
 	{
 		$user = User::find($id);
@@ -42,7 +44,7 @@ class UserController extends \BaseController {
 			return Response::json(['alert' => 'User'.Messages::$notFound], 404);
 	}
 
-	
+
 	public function update($id)
 	{
 		$details = Input::all();
@@ -74,7 +76,7 @@ class UserController extends \BaseController {
 		else
 		{
 			$validate = Validator::make(Input::all(), User::$emailUpdateRules);
-		
+
 			if($validate->fails())
 			{
 				return Response::json(['alert' => Messages::$validateFail,
@@ -89,15 +91,24 @@ class UserController extends \BaseController {
 		        else
 		        	return Response::json(['alert' => Messages::$updateFail.'email'], 500);
 		   	}
-	   	}	
+	   	}
 	}
 
-	
 	public function destroy($id)
 	{
 		if(User::destroy($id))
 			return Response::json(['alert' => Messages::$deleteSuccess.'user']);
 		else
 			return Response::json(['alert' => Messages::$deleteFail.'user']);
+	}
+
+	public function resetPassword($id)
+	{
+		$user = User::find($id);
+		$user->password = Hash::make('changeme');
+		if($user->save())
+			return Response::json(['alert' => Messages::$updateSuccess.'password'], 200);
+		else
+			return Response::json(['alert' => Messages::$updateFail.'password'], 500);
 	}
 }
