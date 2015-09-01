@@ -21,8 +21,6 @@ class RandomGeneratorController extends \BaseController {
 			$marks = count($marks);
 		}
 		unset($marks);
-		// return Response::json($noQuestionsPerSection);
-// retry:
 		$paper = [];
 		$flag=false;						//flag sets to false if there are insufficient questions
 		$m=0;
@@ -43,18 +41,13 @@ class RandomGeneratorController extends \BaseController {
 						$paperRequirement[$k]['marks'])))
 						{
 							$flag=false;
-							// break;
-							// if($flag>50)
-							// else goto retry;
 						}
 					$k++;
 				}
 			}
-			// return Response::json($paper);
 			$m++;
 		}
-		// return Response::json([$m,$flag]);
-		// if($m<100 && $flag == true)
+
 		if($flag)
 			return Response::json($paper);
 		else
