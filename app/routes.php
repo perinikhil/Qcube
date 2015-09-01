@@ -11,18 +11,18 @@ Route::group(array('prefix' => 'api'), function() {
     // Route::get('departments/{departmentId}/subjects/{subjectId}/random-main', ['as' => 'random-main', 'uses' => 'RandomGeneratorController@randomMain']);
     Route::post('departments/{departmentId}/subjects/{subjectId}/generate', ['as' => 'generate', 'uses' => 'RandomGeneratorController@generate']);
 
-    Route::resource('users', 'UserController', ['except' => ['create', 'edit']]);
     Route::put('users/{userId}/reset-password', 'UserController@resetPassword');
+    Route::resource('users', 'UserController', ['except' => ['create', 'edit']]);
 
     Route::resource('organizations', 'OrganizationController', ['except' => ['create', 'edit']]);
 
 
-    Route::resource('organizations.departments', 'DepartmentController', ['except' => ['create', 'edit']]);
     Route::get('organizations/{organizationId}/departments/candidates', 'DepartmentController@candidates');
+    Route::resource('organizations.departments', 'DepartmentController', ['except' => ['create', 'edit']]);
 
 
-    Route::resource('departments.subjects', 'SubjectController', ['except' => ['create', 'edit']]);
     Route::get('organizations/{organizationId}/departments/{departmentId}/subjects/{subjectId}/units', 'SubjectController@getUnits');
+    Route::resource('departments.subjects', 'SubjectController', ['except' => ['create', 'edit']]);
 
 
     Route::resource('departments.subjects.questions', 'QuestionController', ['except' => ['create', 'edit']]);
