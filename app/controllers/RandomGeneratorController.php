@@ -22,25 +22,28 @@ class RandomGeneratorController extends \BaseController {
 			$marks = count($marks);
 		}
 		unset($marks);
-		// return Response::json($noQuestionsPerMain);
 		$paper = [];
 		for($i=0; $i<$noSections; $i++)
 		{
 			for($j=0; $j<$noQuestionsPerMain[$i]; $j++)
 			{
-				if(!($paper[$i][$j] = self::randomMain($subjectId, $paperRequirement[$i*$noSections+$j]['units'],
-					$paperRequirement[$i*$noSections+$j]['marks'])))
-						return Response::json(['alert' => 'Insufficient questions'], 404);
+				for($j=0; $j<$noQuestionsPerSection[$i]; $j++)
+				{
+					if(!($paper[$i][$j] = self::randomMain($subjectId, $paperRequirement[$k]['units'],
+						$paperRequirement[$k]['marks'])))
+						{
+							$flag=false;
+						}
+					$k++;
+				}
 			}
+			$m++;
 		}
-		// foreach($paperRequirement as &$requirement)
-		// {
-		// 	$requirement = (object)$requirement;
-		// 	// $requirement->question = [];
-		// 	if(!($requirement->questions = self::randomMain($subjectId, $requirement->units, $requirement->marks)))
-		// }
-		// unset($requirement);
-		return Response::json($paper);
+
+		if($flag)
+			return Response::json($paper);
+		else
+			return Response::json(['alert' => 'Insufficient questions'], 404);
 	}
 
 	public function randomMain($subjectId, $units, $totalMarks)

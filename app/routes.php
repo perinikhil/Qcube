@@ -12,7 +12,7 @@ Route::group(array('prefix' => 'api'), function() {
     Route::post('departments/{departmentId}/subjects/{subjectId}/generate', ['as' => 'generate', 'uses' => 'RandomGeneratorController@generate']);
 
     Route::resource('users', 'UserController', ['except' => ['create', 'edit']]);
-    Route::put('users/{userId}/resetPassword', 'UserController@resetPassword');
+    Route::put('users/{userId}/reset-password', 'UserController@resetPassword');
 
     Route::resource('organizations', 'OrganizationController', ['except' => ['create', 'edit']]);
 
