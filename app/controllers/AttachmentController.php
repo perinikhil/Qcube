@@ -22,7 +22,7 @@ class AttachmentController extends \BaseController {
 				self::destroy($departmentId, $subjectId, $questionId, $hasAttachment->id);
 			}
 			$file = Input::file('attachment');
-	        $extension = $file->getClientOriginalExtension();
+	        $extension = Input::file('Attachment')->getClientOriginalExtension();
 	        $fileName = $questionId . '_' . str_random(16) . '.' . $extension;
 	        $destinationPath = app_path() . '/uploads/attachments';
 	        $details['path'] = $fileName;

@@ -115,13 +115,15 @@ class RandomGeneratorController extends \BaseController {
 				{
 					$question = Question::where('subject_id', $subjectId)->whereIn('unit', $units)
 						->where('marks', '<=', $remainingMarks)->get()->random(1);
-					$question->attachments = $question->attachments;
+					if($question)
+						$question->attachments = $question->attachments;
 				}
 				else
 				{
 					$question = Question::where('subject_id', $subjectId)->whereIn('unit', $units)
 						->where('marks', '<=', $remainingMarks)->whereNotIn('id', self::$allPickedQuestionIds)->get()->random(1);
-					$question->attachments = $question->attachments;
+					if($question)
+						$question->attachments = $question->attachments;
 				}
 
 				self::$allPickedQuestions[self::$i] = $question;

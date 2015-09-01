@@ -12,12 +12,13 @@ Route::group(array('prefix' => 'api'), function() {
     Route::post('departments/{departmentId}/subjects/{subjectId}/generate', ['as' => 'generate', 'uses' => 'RandomGeneratorController@generate']);
 
     Route::resource('users', 'UserController', ['except' => ['create', 'edit']]);
+    Route::put('users/{userId}/resetPassword', 'UserController@resetPassword');
 
     Route::resource('organizations', 'OrganizationController', ['except' => ['create', 'edit']]);
 
 
     Route::resource('organizations.departments', 'DepartmentController', ['except' => ['create', 'edit']]);
-    Route::get('organizations/{organizationId}/departments/{departmentId}/candidates', 'DepartmentController@candidates');
+    Route::get('organizations/{organizationId}/departments/candidates', 'DepartmentController@candidates');
 
 
     Route::resource('departments.subjects', 'SubjectController', ['except' => ['create', 'edit']]);

@@ -60,7 +60,8 @@ class DepartmentController extends \BaseController {
 			$details['password'] = Hash::make('changeme');
 			$details['permissions'] = 'd';
 			$details['department_id'] = $department->id;
-			$details['organization_id'] = Auth::user()->organization_id;
+			if(Auth::check())
+				$details['organization_id'] = Auth::user()->organization_id;
 			if($user = User::create($details))
 				return true;
 	    else
@@ -171,9 +172,9 @@ class DepartmentController extends \BaseController {
 	        return Response::json(['alert' => 'Department'.Messages::$notFound], 404);
 	}
 
-	public function candidates($organizationId, $id)
+	public function candidates($organizationId)
 	{
-		$candidates = User::where('department_id', $id)->where('permissions', 'not like', '%d%')->get();
+		$candidates = User::where('organization_id', $organizationId)->where('permissions', 'not like', '%d%')->get();
 
 		return Response::json($candidates);
 	}
