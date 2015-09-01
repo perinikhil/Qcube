@@ -26,12 +26,14 @@ class UserController extends \BaseController {
 			{
 				$details['department_id'] = Auth::user()->department_id;
 				$details['organization_id'] = Auth::user()->organization_id;
-			}
-	    if(User::create($details))
+				if(User::create($details))
         	return Response::json(['alert' => Messages::$createSuccess.'user'], 200);
-        else
-        	return Response::json(['alert' => Messages::$createFail.'user'], 500);
-	   	}
+				else
+	      	return Response::json(['alert' => Messages::$createFail.'user'], 500);
+			}
+      else
+      	return Response::json(['alert' => Messages::$createFail.'user'], 500);
+   	}
 	}
 
 
