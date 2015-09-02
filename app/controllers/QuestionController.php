@@ -5,7 +5,7 @@ class QuestionController extends \BaseController {
 
 	public function index($departmentId, $subjectId)
 	{
-		$questions = Department::find($departmentId)->subjects()->find($subjectId)->questions;
+		$questions = Subject::find($subjectId)->questions;
 		foreach($questions as $question)
 		{
 			$question->attachment = Attachment::where('question_id', $question->id)->first();
@@ -41,8 +41,7 @@ class QuestionController extends \BaseController {
 
 	public function show($departmentId, $subjectId, $questionId)
 	{
-		// $question = Question::find($questionId);
-		$question = Department::find($departmentId)->subjects()->find($subjectId)->questions()->find($questionId);
+		$question = Question::find($questionId);
 
 		if($question)
 		{
@@ -56,7 +55,7 @@ class QuestionController extends \BaseController {
 
 	public function update($departmentId, $subjectId, $questionId)
 	{
-		$question = Department::find($departmentId)->subjects()->find($subjectId)->questions()->find($questionId);
+		$question = Question::find($questionId);
 
 		$details = Input::all();
 
@@ -73,7 +72,7 @@ class QuestionController extends \BaseController {
 
 	public function destroy($departmentId, $subjectId, $questionId)
 	{
-		$question = Department::find($departmentId)->subjects()->find($subjectId)->questions()->find($questionId);
+		$question = Question::find($questionId);
 
 		if($question)
 		{

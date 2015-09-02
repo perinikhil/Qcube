@@ -5,7 +5,7 @@ class AttachmentController extends \BaseController {
 
 	public function index($departmentId, $subjectId, $questionId)
 	{
-		$attachments = Department::find($departmentId)->subjects()->find($subjectId)->questions()->find($questionId)->attachments;
+		$attachments = Question::find($questionId)->attachments;
 		return Response::json($attachments);
 	}
 
@@ -51,7 +51,7 @@ class AttachmentController extends \BaseController {
 
 	public function destroy($departmentId, $subjectId, $questionId, $attachmentId)
 	{
-		$attachment = Department::find($departmentId)->subjects()->find($subjectId)->questions()->find($questionId)->attachments()->find($attachmentId);
+		$attachment = Attachment::find($attachmentId);
 
 		if($attachment)
 		{
@@ -75,7 +75,7 @@ class AttachmentController extends \BaseController {
 
 	public function update($departmentId, $subjectId, $questionId, $attachmentId)
 	{
-		$attachment = Department::find($departmentId)->subjects()->find($subjectId)->questions()->find($questionId)->attachments()->find($attachmentId);
+		$attachment = Attachment::find($attachmentId);
 		$oldAttachment = $attachment;
 		$destinationPath = app_path().'/uploads/attachments';
 

@@ -72,7 +72,7 @@ class DepartmentController extends \BaseController {
 
 	public function show($organizationId, $id)
 	{
-		$department = Organization::find($organizationId)->departments()->where('id', $id)->get();
+		$department = Department::find($id);
 		if($department)
 			return Response::json($department);
 		else
@@ -83,7 +83,7 @@ class DepartmentController extends \BaseController {
 
 	public function update($organizationId, $id)
 	{
-		$department = Organization::find($organizationId)->departments()->find($id);
+		$department = Department::find($id);
 		$details = Input::except('department_head');
 
 		if($department)
@@ -159,7 +159,7 @@ class DepartmentController extends \BaseController {
 
 	public function destroy($organizationId, $id)
 	{
-		$department = Organization::find($organizationId)->departments()->where('id', $id);
+		$department = Department::find($id);
 
 		if($department)
 		{

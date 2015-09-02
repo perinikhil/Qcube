@@ -53,8 +53,6 @@ class RandomGeneratorController extends \BaseController {
 
 	public function randomMain($subjectId, $units, $totalMarks)
 	{
-		// $countDistinctMarks = [];
-
 		if(self::$i == 0)
 			$allMarks = Question::select('marks')->where('subject_id', $subjectId)->whereIn('unit', $units)->get();
 		else
@@ -64,7 +62,6 @@ class RandomGeneratorController extends \BaseController {
 		$length = sizeof($allMarks)/sizeof($allMarks[0]);
 
 		$answer = self::randomMainSumOfSubsets($allMarks, $length, $totalMarks);
-		// return $answer;
 
 		if($answer == true)
 		{

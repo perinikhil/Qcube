@@ -8,7 +8,7 @@ class PatternController extends \BaseController {
 		return Response::json($patterns);
 	}
 
-	
+
 	public function store($departmentId)
 	{
 		$details = Input::all();
@@ -18,7 +18,7 @@ class PatternController extends \BaseController {
 
 		if($validate->fails())
 		{
-			return Response::json(['alert' => Messages::$validateFail, 
+			return Response::json(['alert' => Messages::$validateFail,
 				'messages' => $validate->messages()],
 				403);
 		}
@@ -33,20 +33,20 @@ class PatternController extends \BaseController {
 		}
 	}
 
-	
+
 	public function show($departmentId, $patternId)
 	{
-		$pattern = Department::find($departmentId)->patterns()->where('id', $patternId)->get();
+		$pattern = Pattern::find($patternId);
 		if($pattern)
 			return Response::json($pattern);
 		else
 			return Response::json(['alert' => 'Pattern'.Messages::$notFound], 404);
 	}
 
-	
+
 	public function update($departmentId, $patternId)
 	{
-		$pattern = Department::find($departmentId)->patterns()->where('id', $patternId);
+		$pattern = Pattern::find($patternId);
 		$details = Input::all();
 
 		if($pattern)
@@ -60,10 +60,10 @@ class PatternController extends \BaseController {
 			return Response::json(['alert' => 'Pattern'.Messages::$notFound], 404);
 	}
 
-	
+
 	public function destroy($departmentId, $patternId)
 	{
-		$pattern = Department::find($departmentId)->patterns()->where('id', $patternId);
+		$pattern = Pattern::find($patternId);
 
 		if($pattern->delete())
 			return Response::json(['alert' => Messages::$deleteSuccess.'pattern']);

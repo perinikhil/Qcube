@@ -36,7 +36,7 @@ class SubjectController extends \BaseController {
 
 	public function show($departmentId, $subjectId)
 	{
-		$subject = Department::find($departmentId)->subjects()->where('id', $subjectId)->get();
+		$subject = Subject::find($subjectId);
 		if($subject)
 			return Response::json($subject);
 		else
@@ -46,7 +46,7 @@ class SubjectController extends \BaseController {
 
 	public function update($departmentId, $subjectId)
 	{
-		$subject = Department::find($departmentId)->subjects()->where('id', $subjectId);
+		$subject = Subject::find($subjectId);
 		$details = Input::all();
 
 		if($subject)
@@ -63,7 +63,7 @@ class SubjectController extends \BaseController {
 
 	public function destroy($departmentId, $subjectId)
 	{
-		$subject = Department::find($departmentId)->subjects()->where('id', $subjectId);
+		$subject = Subject::find($subjectId);
 
 		if($subject->delete())
 			return Response::json(['alert' => Messages::$deleteSuccess.'subject']);
