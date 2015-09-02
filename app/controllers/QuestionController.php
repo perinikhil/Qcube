@@ -23,19 +23,23 @@ class QuestionController extends \BaseController {
 
 		if($validate->fails())
 		{
-			return Response::json(['alert' => Messages::$validateFail], 403);
+			return Response::json(['alert' => Messages::$validateFail,
+				'messages' => $validate->messages()], 403);
 		}
 		else
 		{
+			// dd($file);
 			if($question = Question::create($details))
 	    {
-				if(Input::has('attachment'))
-				{
-					if(self::storeAttachment($departmentId, $subjectId, $question->id))
-						return Response::json(['question' => $question,
-							'alert' => Messages::$createSuccess.'question'],
-							200);
-				}
+				// if(Input::has('attachment'))
+				// {
+				// 	$file = Input::file('attachment');
+				// 	if(self::storeAttachment($departmentId, $subjectId, $question->id, $file))
+				// 		return Response::json(['question' => $question,
+				// 			'alert' => Messages::$createSuccess.'question'],
+				// 			200);
+				// }
+				// else
 				return Response::json(['question' => $question,
       		'alert' => Messages::$createSuccess.'question'],
       		200);
@@ -71,12 +75,12 @@ class QuestionController extends \BaseController {
 		{
 			if($question->update($details))
 			{
-				if(Input::has('attachment'))
-				{
-					if(self::storeAttachment($departmentId, $subjectId, $question->id))
-						return Response::json(['alert' => Messages::$updateSuccess.'question'],
-							200);
-				}
+				// if(Input::has('attachment'))
+				// {
+				// 	if(self::storeAttachment($departmentId, $subjectId, $question->id))
+				// 		return Response::json(['alert' => Messages::$updateSuccess.'question'],
+				// 			200);
+				// }
 	      return Response::json(['alert' => Messages::$updateSuccess.'question'], 200);
       }
 			else
@@ -103,7 +107,7 @@ class QuestionController extends \BaseController {
 	}
 
 
-	public function storeAttachment($departmentId, $subjectId, $questionId)
+	public function storeAttachment($departmentId, $subjectId, $questionId, $file)
 	{
 		if($hasAttachment = Attachment::where('question_id', $questionId)->first())
 		{
@@ -113,8 +117,8 @@ class QuestionController extends \BaseController {
 				File::delete($fileName);
 			else return false;
 		}
-		$file = Input::file('attachment');
-		$extension = Input::file('attachment')->getClientOriginalExtension();
+
+		$extension = $file->getClientOriginalExtension();
 		$fileName = $questionId . '_' . str_random(16) . '.' . $extension;
 		$destinationPath = app_path() . '/uploads/attachments';
 		$details['path'] = $fileName;

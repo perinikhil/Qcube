@@ -22,26 +22,26 @@ class AttachmentController extends \BaseController {
 				self::destroy($departmentId, $subjectId, $questionId, $hasAttachment->id);
 			}
 			$file = Input::file('attachment');
-	        $extension = Input::file('Attachment')->getClientOriginalExtension();
-	        $fileName = $questionId . '_' . str_random(16) . '.' . $extension;
-	        $destinationPath = app_path() . '/uploads/attachments';
-	        $details['path'] = $fileName;
-	        if(($file->move($destinationPath, $fileName)))
-	        {
-	        	if(Attachment::create($details))
-	        	{
-	        		return Response::json(['alert' => Messages::$uploadSuccess.'attachment'], 200);
-	        	}
-	        	else
-	        	{
-	        		File::delete($destinationPath.$fileName);
-	        		return Response::json(['alert' => Messages::$uploadFail.'attachment'], 500);
-	        	}
-	        }
-	        else
-	        {
-						return Response::json(['alert' => Messages::$uploadFail.'attachment'], 500);
-					}
+      $extension = $file->getClientOriginalExtension();
+      $fileName = $questionId . '_' . str_random(16) . '.' . $extension;
+      $destinationPath = app_path() . '/uploads/attachments';
+      $details['path'] = $fileName;
+      if(($file->move($destinationPath, $fileName)))
+      {
+      	if(Attachment::create($details))
+      	{
+      		return Response::json(['alert' => Messages::$uploadSuccess.'attachment'], 200);
+      	}
+      	else
+      	{
+      		File::delete($destinationPath.$fileName);
+      		return Response::json(['alert' => Messages::$uploadFail.'attachment'], 500);
+      	}
+      }
+      else
+      {
+				return Response::json(['alert' => Messages::$uploadFail.'attachment'], 500);
+			}
 		}
 		else
 		{
@@ -72,39 +72,39 @@ class AttachmentController extends \BaseController {
 			return Response::json(['alert' => 'Attachment not found'], 404);
 		}
 	}
-}
 
-	// public function update($departmentId, $subjectId, $questionId, $attachmentId)
-	// {
-	// 	$attachment = Department::find($departmentId)->subjects()->find($subjectId)->questions()->find($questionId)->attachments()->find($attachmentId);
-	// 	$oldAttachment = $attachment;
-	// 	$destinationPath = app_path().'/uploads/attachments';
-	//
-	// 	if($attachment)
-	// 	{
-	// 		if(Input::hasFile('attachment'))
-	// 		{
-	// 			$newFile = Input::file('attachment');
-	// 	        $extension = $newFile->getClientOriginalExtension();
-	// 	        $newFileName = $questionId . '_' . str_random(16) . '.' . $extension;
-	// 	        $details['path'] = $newFileName;
-	// 	        if(($newFile->move($destinationPath, $newFileName)))
-	// 	        {
-	// 	        	if($attachment->update($details))
-	// 	        	{
-	// 	        		File::delete($destinationPath.$oldAttachment->path);
-	// 	        		return Response::json(['alert' => 'Sucessfully uploaded attachment'], 200);
-	// 	        	}
-	// 	        	else
-	// 	        	{
-	// 	        		File::delete($destinationPath.$newFileName);
-	// 	        		return Response::json(['alert' => 'Failed to update attachment'], 500);
-	// 	        	}
-	// 	        }
-	// 	        else
-	// 	        {
-	// 	        	return Response::json(['alert' => 'Failed to upload attachment'], 404);
-	// 	        }
-	// 		}
-	// 	}
-	// }
+	public function update($departmentId, $subjectId, $questionId, $attachmentId)
+	{
+		$attachment = Department::find($departmentId)->subjects()->find($subjectId)->questions()->find($questionId)->attachments()->find($attachmentId);
+		$oldAttachment = $attachment;
+		$destinationPath = app_path().'/uploads/attachments';
+
+		if($attachment)
+		{
+			if(Input::hasFile('attachment'))
+			{
+				$newFile = Input::file('attachment');
+        $extension = $newFile->getClientOriginalExtension();
+        $newFileName = $questionId . '_' . str_random(16) . '.' . $extension;
+        $details['path'] = $newFileName;
+        if(($newFile->move($destinationPath, $newFileName)))
+        {
+        	if($attachment->update($details))
+        	{
+        		File::delete($destinationPath.$oldAttachment->path);
+        		return Response::json(['alert' => 'Sucessfully uploaded attachment'], 200);
+        	}
+        	else
+        	{
+        		File::delete($destinationPath.$newFileName);
+        		return Response::json(['alert' => 'Failed to update attachment'], 500);
+        	}
+        }
+        else
+        {
+        	return Response::json(['alert' => 'Failed to upload attachment'], 404);
+        }
+			}
+		}
+	}
+}
