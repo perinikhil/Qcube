@@ -25,7 +25,7 @@ return array(
 			'host'      => 'localhost',
 			'database'  => 'qcube',
 			'username'  => 'root',
-			'password'  => 'root',
+			'password'  => 'peri',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',

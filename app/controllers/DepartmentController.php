@@ -48,6 +48,7 @@ class DepartmentController extends \BaseController {
 		{
 			$existingUser->department_id = $department->id;
 			$existingUser->permissions = Permissions::addPermissions($existingUser->permissions, 'd');
+			$existingUser->permissions = Permissions::removePermissions($existingUser->permissions, 't');
 			if($existingUser->save())
 				return true;
 			else
@@ -122,7 +123,9 @@ class DepartmentController extends \BaseController {
 		if($oldHead)
 		{
 			$newHead->permissions = Permissions::addPermissions($newHead->permissions, 'd');
+			$newHead->permissions = Permissions::removePermissions($newHead->permissions, 't');
 			$oldHead->permissions = Permissions::removePermissions($oldHead->permissions, 'd');
+			$oldHead->permissions = Permissions::addPermissions($oldHead->permissions, 't');
 			$newHead->department_id = $department->id;
 			if($oldHead->save() && $newHead->save())
 			{
@@ -134,6 +137,8 @@ class DepartmentController extends \BaseController {
 		else if($newHead)
 		{
 			$newHead->permissions = Permissions::addPermissions($newHead->permissions, 'd');
+			$newHead->permissions = Permissions::removePermissions($newHead->permissions, 't');
+
 			$newHead->department_id = $department->id;
 
 			if($newHead->save())

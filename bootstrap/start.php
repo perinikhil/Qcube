@@ -26,7 +26,7 @@ $app = new Illuminate\Foundation\Application;
 
 $env = $app->detectEnvironment(array(
 
-	'local' => array('MGX92.local'),
+	'local' => array('I5520'),
 
 ));
 
