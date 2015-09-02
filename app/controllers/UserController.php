@@ -15,7 +15,7 @@ class UserController extends \BaseController {
 		if($validate->fails())
 		{
 			return Response::json(['alert' => Messages::$validateFail,
-				'messages' => $valdate->messages()],
+				'messages' => $validate->messages()],
 				403);
 		}
 		else
@@ -26,8 +26,9 @@ class UserController extends \BaseController {
 			{
 				$details['department_id'] = Auth::user()->department_id;
 				$details['organization_id'] = Auth::user()->organization_id;
-				if(User::create($details))
-        	return Response::json(['alert' => Messages::$createSuccess.'user'], 200);
+				if($user = User::create($details))
+        	return Response::json(['user' => $user,
+						'alert' => Messages::$createSuccess.'user'], 200);
 				else
 	      	return Response::json(['alert' => Messages::$createFail.'user'], 500);
 			}

@@ -22,8 +22,9 @@ class AuthenticationController extends \BaseController
 		{
 			$credentials = Input::only('email','password');
 
-			if(Auth::check())
-				return Response::json(['alert' => Messages::$alreadyLoggedIn]);
+			if(Auth::check()) {
+				Auth::logout();
+			}
 			if (Auth::attempt($credentials))
 				return Response::json(['user' => Auth::user(),
 					'alert' => Messages::$loginSuccess],

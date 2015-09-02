@@ -1,6 +1,10 @@
 <?php
 header('Access-Control-Allow-Origin: *');
 
+Route::get('/', function() {
+  return View::make('index');
+});
+
 Route::group(array('prefix' => 'api'), function() {
 
     Route::post('login','AuthenticationController@login');
