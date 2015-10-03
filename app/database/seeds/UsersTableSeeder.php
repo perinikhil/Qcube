@@ -10,7 +10,6 @@ class UsersTableSeeder extends Seeder {
 			'email' => 'peri@nikhil',
 			'password' => Hash::make('peri'),
 			'permissions' => 'o',
-			'organization_id' => 1,
 			'department_id' => 1
 		]);
 
@@ -19,7 +18,6 @@ class UsersTableSeeder extends Seeder {
 			'email' => 'lakie@ranganath',
 			'password' => Hash::make('lakie'),
 			'permissions' => 'o',
-			'organization_id' => 1,
 			'department_id' => 1
 		]);
 	}

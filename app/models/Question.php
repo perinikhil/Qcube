@@ -1,7 +1,7 @@
 <?php
 
 class Question extends \Eloquent {
-	protected $fillable = ['subject_id', 'unit', 'text', 'marks', 'tags'];
+	protected $fillable = ['subject_id', 'unit', 'text', 'marks', 'tags', 'course_outcome'];
 
 	public static $rules = [
 		'subject_id' => 'required',

@@ -28,7 +28,6 @@ class QuestionController extends \BaseController {
 		}
 		else
 		{
-			// dd($file);
 			if($question = Question::create($details))
 				return Response::json(['question' => $question,
       		'alert' => Messages::$createSuccess.'question'],

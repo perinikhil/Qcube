@@ -25,7 +25,6 @@ class UserController extends \BaseController {
 			if(Auth::check())
 			{
 				$details['department_id'] = Auth::user()->department_id;
-				$details['organization_id'] = Auth::user()->organization_id;
 				if($user = User::create($details))
         	return Response::json(['user' => $user,
 						'alert' => Messages::$createSuccess.'user'], 200);

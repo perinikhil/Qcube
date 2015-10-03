@@ -18,9 +18,7 @@ class CreateDepartmentsTable extends Migration {
 
 			$table->string('name');
 			$table->string('abbr');
-			$table->integer('organization_id')->unsigned();
-			$table->foreign('organization_id')->references('id')->on('organizations');
-			
+
 			$table->timestamps();
 		});
 	}

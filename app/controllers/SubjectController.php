@@ -75,7 +75,7 @@ class SubjectController extends \BaseController {
 	{
 		$units = Subject::find($subjectId)->questions()->lists('unit');
 		$units = array_values(array_unique($units));
-		return Response::json($units);
+		return Response::json(['units' => $units]);
 	}
 
 }

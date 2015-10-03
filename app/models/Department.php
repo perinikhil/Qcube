@@ -2,10 +2,10 @@
 
 class Department extends \Eloquent {
 
-	protected $fillable = ['name', 'abbr', 'organization_id'];
+	protected $fillable = ['name', 'abbr'];
 
 	public static $rules = [
-		// 'name' => 'required'
+		'name' => 'required'
 	];
 
 	public function subjects()
@@ -16,10 +16,5 @@ class Department extends \Eloquent {
 	public function patterns()
 	{
 		return $this->hasMany('Pattern');
-	}
-
-	public function organization()
-	{
-		return $this->belongsTo('Organization');
 	}
 }

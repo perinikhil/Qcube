@@ -22,7 +22,7 @@ class RandomGeneratorController extends \BaseController {
 		$paper = [];
 		$flag=false;						//flag sets to false if there are insufficient questions
 		$m=0;
-		while($flag==false && $m<100)
+		while($flag==false && $m<25)
 		{
 			self::$i = 0;
 			self::$allPickedQuestions = [];
@@ -35,7 +35,7 @@ class RandomGeneratorController extends \BaseController {
 				for($j=0; $j<$noQuestionsPerSection[$i]; $j++)
 				{
 					if(!($paper[$i][$j] = self::randomMain($subjectId, $paperRequirement[$k]['units'],
-						$paperRequirement[$k]['marks'])))
+						$paperRequirement[$k]['marks'], $paperRequirement[$k]['course_outcomes'])))
 						{
 							$flag=false;
 						}
@@ -51,12 +51,20 @@ class RandomGeneratorController extends \BaseController {
 	}
 
 
-	public function randomMain($subjectId, $units, $totalMarks)
+	public function randomMain($subjectId, $units, $totalMarks, $courseOutcomes)
 	{
+		$query = Question::select('marks')->where('subject_id', $subjectId)->whereIn('unit', $units);
+		$query->where(function($q) use ($courseOutcomes) {
+			foreach($courseOutcomes as $courseOutcome)
+			{
+				$q->orWhere('course_outcome', 'like', '%'.$courseOutcome.'%');
+			}
+		});
+
 		if(self::$i == 0)
-			$allMarks = Question::select('marks')->where('subject_id', $subjectId)->whereIn('unit', $units)->get();
+			$allMarks = $query->get();
 		else
-			$allMarks = Question::select('marks')->where('subject_id', $subjectId)->whereIn('unit', $units)->whereNotIn('id', self::$allPickedQuestionIds)->get();
+			$allMarks = $query->whereNotIn('id', self::$allPickedQuestionIds)->get();
 
 		if(count($allMarks) == 0)	return false;
 		$length = sizeof($allMarks)/sizeof($allMarks[0]);
@@ -65,7 +73,7 @@ class RandomGeneratorController extends \BaseController {
 
 		if($answer == true)
 		{
-			$questions = self::pickRandomMain($subjectId, $units, $totalMarks);
+			$questions = self::pickRandomMain($subjectId, $units, $totalMarks, $courseOutcomes);
 			return $questions;
 		}
 		else
@@ -88,27 +96,33 @@ class RandomGeneratorController extends \BaseController {
 
 	}
 
-	private function pickRandomMain($subjectId, $units, $totalMarks)
+	private function pickRandomMain($subjectId, $units, $totalMarks, $courseOutcomes)
 	{
 		$curPickedQuestions = [];
 		$j=0;
+
 		do
 		{
 			$remainingMarks = $totalMarks;
+			$query = Question::where('subject_id', $subjectId)->whereIn('unit', $units);
+			$query->where(function($q) use ($courseOutcomes) {
+				foreach($courseOutcomes as $courseOutcome)
+				{
+					$q->orWhere('course_outcome', 'like', '%'.$courseOutcome.'%');
+				}
+			});
 
 			while($remainingMarks > 0)
 			{
 				if(sizeof(self::$allPickedQuestions) == 0)
 				{
-					$question = Question::where('subject_id', $subjectId)->whereIn('unit', $units)
-						->where('marks', '<=', $remainingMarks)->get()->random(1);
+					$question = $query->where('marks', '<=', $remainingMarks)->get()->random(1);
 					if($question)
 						$question->attachments = $question->attachments;
 				}
 				else
 				{
-					$question = Question::where('subject_id', $subjectId)->whereIn('unit', $units)
-						->where('marks', '<=', $remainingMarks)->whereNotIn('id', self::$allPickedQuestionIds)->get()->random(1);
+					$question = $query->where('marks', '<=', $remainingMarks)->whereNotIn('id', self::$allPickedQuestionIds)->get()->random(1);
 					if($question)
 						$question->attachments = $question->attachments;
 				}

@@ -2,9 +2,9 @@
 
 class DepartmentController extends \BaseController {
 
-	public function index($organizationId)
+	public function index()
 	{
-		$departments = Organization::find($organizationId)->departments;
+		$departments = Department::all();
 		foreach($departments as $department)
 		{
 			$department->department_head = User::where('department_id', $department->id)->where('permissions', 'like', '%d%')->first();
@@ -13,7 +13,7 @@ class DepartmentController extends \BaseController {
 		return Response::json($departments);
 	}
 
-	public function store($organizationId)
+	public function store()
 	{
 		$validate = Validator::make(Input::all(), Department::$rules);
 
@@ -26,7 +26,6 @@ class DepartmentController extends \BaseController {
 		else
 		{
 			$details = Input::all();
-			$details['organization_id'] = $organizationId;
 
 		    if($department = Department::create($details))
 		    {
@@ -61,8 +60,7 @@ class DepartmentController extends \BaseController {
 			$details['password'] = Hash::make('changeme');
 			$details['permissions'] = 'd';
 			$details['department_id'] = $department->id;
-			if(Auth::check())
-				$details['organization_id'] = Auth::user()->organization_id;
+
 			if($user = User::create($details))
 				return true;
 	    else
@@ -71,7 +69,7 @@ class DepartmentController extends \BaseController {
 		}
 	}
 
-	public function show($organizationId, $id)
+	public function show($id)
 	{
 		$department = Department::find($id);
 		if($department)
@@ -82,7 +80,7 @@ class DepartmentController extends \BaseController {
 	}
 
 
-	public function update($organizationId, $id)
+	public function update($id)
 	{
 		$department = Department::find($id);
 		$details = Input::except('department_head');
@@ -153,7 +151,6 @@ class DepartmentController extends \BaseController {
 			$details['password'] = Hash::make('changeme');
 			$details['permissions'] = 'd';
 			$details['department_id'] = $department->id;
-			$details['organization_id'] = Auth::user()->organization_id;
 			if($user = User::create($details))
 				return true;
 	    else
@@ -162,7 +159,7 @@ class DepartmentController extends \BaseController {
 	}
 
 
-	public function destroy($organizationId, $id)
+	public function destroy($id)
 	{
 		$department = Department::find($id);
 
@@ -177,9 +174,9 @@ class DepartmentController extends \BaseController {
 	        return Response::json(['alert' => 'Department'.Messages::$notFound], 404);
 	}
 
-	public function candidates($organizationId)
+	public function candidates()
 	{
-		$candidates = User::where('organization_id', $organizationId)->where('permissions', 'not like', '%d%')->get();
+		$candidates = User::where('permissions', 'not like', '%d%')->get();
 
 		return Response::json($candidates);
 	}
