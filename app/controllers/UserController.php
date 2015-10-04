@@ -4,7 +4,7 @@ class UserController extends \BaseController {
 
 	public function index()
 	{
-		$users = User::all();
+		$users = User::orderBy('name')->get();
 		return Response::json($users);
 	}
 
@@ -61,25 +61,25 @@ class UserController extends \BaseController {
 							'password' => $details['old_password']];
 			if(!(Auth::validate($credentials)))
 			{
-				return Response::json(['alert' => 'Old password does not match']);
+				return Response::json(['alert' => 'Old password does not match'], 400);
 			}
 			else
 			{
 				$details['email'] = Input::get('email');
 				$details['password'] = Hash::make(Input::get('new_password'));
 				if($user->update($details))
-		        	return Response::json(['alert' => Messages::$updateSuccess.'password'], 200);
+		        	return Response::json(['alert' => Messages::$updateSuccess.'profile'], 200);
 		        else
-		        	return Response::json(['alert' => Messages::$updateFail.'password'], 500);
+		        	return Response::json(['alert' => Messages::$updateFail.'profile'], 500);
 			}
 		}
 
 		else
 		{
 	    if($user->update($details))
-	    	return Response::json(['alert' => Messages::$updateSuccess.'email'], 200);
+	    	return Response::json(['alert' => Messages::$updateSuccess.'profile'], 200);
 	    else
-      	return Response::json(['alert' => Messages::$updateFail.'email'], 500);
+      	return Response::json(['alert' => Messages::$updateFail.'profile'], 500);
 		}
 	}
 
@@ -96,8 +96,8 @@ class UserController extends \BaseController {
 		$user = User::find($id);
 		$user->password = Hash::make('changeme');
 		if($user->save())
-			return Response::json(['alert' => Messages::$updateSuccess.'password'], 200);
+			return Response::json(['alert' => 'Password reset'], 200);
 		else
-			return Response::json(['alert' => Messages::$updateFail.'password'], 500);
+			return Response::json(['alert' => 'Failed to reset password'], 500);
 	}
 }

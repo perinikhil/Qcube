@@ -4,7 +4,7 @@ class DepartmentController extends \BaseController {
 
 	public function index()
 	{
-		$departments = Department::all();
+		$departments = Department::orderBy('name')->get();
 		foreach($departments as $department)
 		{
 			$department->department_head = User::where('department_id', $department->id)->where('permissions', 'like', '%d%')->first();

@@ -4,7 +4,7 @@ class SubjectController extends \BaseController {
 
 	public function index($departmentId)
 	{
-		$subjects = Department::find($departmentId)->subjects;
+		$subjects = Department::find($departmentId)->subjects()->orderBy('name')->get();
 		return Response::json($subjects);
 	}
 

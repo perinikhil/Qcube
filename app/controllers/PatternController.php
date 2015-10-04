@@ -4,7 +4,7 @@ class PatternController extends \BaseController {
 
 	public function index($departmentId)
 	{
-		$patterns = Department::find($departmentId)->patterns;
+		$patterns = Department::find($departmentId)->patterns()->orderBy('name')->get();
 		return Response::json($patterns);
 	}
 

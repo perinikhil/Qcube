@@ -2,10 +2,9 @@
 
 class QuestionController extends \BaseController {
 
-
 	public function index($departmentId, $subjectId)
 	{
-		$questions = Subject::find($subjectId)->questions;
+		$questions = Subject::find($subjectId)->questions()->orderBy('unit')->orderBy('marks')->get();
 		foreach($questions as $question)
 		{
 			$question->attachment = Attachment::where('question_id', $question->id)->first();
