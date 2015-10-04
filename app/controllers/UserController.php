@@ -74,26 +74,13 @@ class UserController extends \BaseController {
 			}
 		}
 
-		//update only email
 		else
 		{
-			$validate = Validator::make(Input::all(), User::$emailUpdateRules);
-
-			if($validate->fails())
-			{
-				return Response::json(['alert' => Messages::$validateFail,
-					'messages' => $validate->messages()],
-					403);
-			}
-
-			else
-			{
-		        if($user->update($details))
-		        	return Response::json(['alert' => Messages::$updateSuccess.'email'], 200);
-		        else
-		        	return Response::json(['alert' => Messages::$updateFail.'email'], 500);
-		   	}
-	   	}
+	    if($user->update($details))
+	    	return Response::json(['alert' => Messages::$updateSuccess.'email'], 200);
+	    else
+      	return Response::json(['alert' => Messages::$updateFail.'email'], 500);
+		}
 	}
 
 	public function destroy($id)
