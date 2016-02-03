@@ -5,7 +5,7 @@ Route::get('/', function() {
   return View::make('index');
 });
 
-Route::group(array('prefix' => 'v1'), function() {
+Route::group(['prefix' => 'v1'], function() {
 
     Route::post('login','AuthenticationController@login');
     Route::get('logout','AuthenticationController@logout');
