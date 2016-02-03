@@ -29,12 +29,11 @@ class DepartmentController extends \BaseController {
 
 		    if($department = Department::create($details))
 		    {
-		    	if(self::storeDepartmentHead($details['department_head_email'], $department))
+		    	if(isset($details['department_head_email']) && self::storeDepartmentHead($details['department_head_email'], $department))
 			    	return Response::json(['department' => $department,
-			        	'alert' => Messages::$createSuccess.'department and department head'],
-			        	200);
+			        	'alert' => Messages::$createSuccess.'department and department head']);
 			    else
-	        		return Response::json(['alert' => Messages::$createFail.'department head'], 500);
+	        		return Response::json(['alert' => Messages::$createSuccess.'department but '.Messages::$createFail.'department head']);
 		    }
 	        else
 	        	return Response::json(['alert' => Messages::$createFail.'department'], 500);
