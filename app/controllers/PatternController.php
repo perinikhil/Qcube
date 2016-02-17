@@ -84,7 +84,7 @@ class PatternController extends \BaseController {
 
 		if($pattern)
 		{
-			if($pattern->delete($details))
+			if($pattern->delete())
         return Response::json([
           'alert' => Messages::$deleteSuccess.'pattern'
         ], 200);
