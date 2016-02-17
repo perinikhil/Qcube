@@ -5,7 +5,10 @@ class SubjectController extends \BaseController {
 	public function index($departmentId)
 	{
 		$subjects = Department::find($departmentId)->subjects()->orderBy('name')->get();
-		return Response::json($subjects);
+    return Response::json([
+      'subjects' => $subjects,
+      'alert' => ''
+    ], 200);
 	}
 
 
@@ -18,18 +21,22 @@ class SubjectController extends \BaseController {
 
 		if($validate->fails())
 		{
-			return Response::json(['alert' => Messages::$validateFail,
-				'messages' => $validate->messages()],
-				403);
+      return Response::json([
+        'alert' => Messages::$validateFail,
+        'messages' => $validate->messages()
+      ], 403);
 		}
 		else
 		{
 			if($subject = Subject::create($details))
-	        	return Response::json(['subject' => $subject,
-	        		'alert' => Messages::$createSuccess.'subject'],
-	        		200);
-	        else
-	        	return Response::json(['alert' => Messages::$createFail.'subject'], 500);
+        return Response::json([
+          'subject' => $subject,
+          'alert' => Messages::$createSuccess.'subject'
+        ], 200);
+	      else
+          return Response::json([
+            'alert' => Messages::$createFail.'subject'
+          ], 500);
 		}
 	}
 
@@ -38,9 +45,14 @@ class SubjectController extends \BaseController {
 	{
 		$subject = Subject::find($subjectId);
 		if($subject)
-			return Response::json($subject);
+      return Response::json([
+        'subject' => $subject,
+        'alert' => ''
+      ], 200);
 		else
-			return Response::json(['alert' => 'Subject'.Messages::$notFound], 404);
+      return Response::json([
+        'alert' => 'Subject'.Messages::$notFound
+      ], 404);
 	}
 
 
@@ -52,12 +64,18 @@ class SubjectController extends \BaseController {
 		if($subject)
 		{
 			if($subject->update($details))
-		        return Response::json(['alert' => Messages::$updateSuccess.'subject'], 200);
+        return Response::json([
+          'alert' => Messages::$updateSuccess.'subject'
+        ], 200);
 		    else
-		       	return Response::json(['alert' => Messages::$updateFail.'subject'], 500);
+          return Response::json([
+            'alert' => Messages::$updateFail.'subject'
+          ], 500);
 		}
 		else
-			return Response::json(['alert' => 'Subject'.Messages::$notFound], 404);
+      return Response::json([
+        'alert' => 'Subject'.Messages::$notFound
+      ], 404);
 	}
 
 
@@ -65,17 +83,32 @@ class SubjectController extends \BaseController {
 	{
 		$subject = Subject::find($subjectId);
 
-		if($subject->delete())
-			return Response::json(['alert' => Messages::$deleteSuccess.'subject']);
+		if($subject)
+		{
+			if($subject->delete())
+        return Response::json([
+          'alert' => Messages::$deleteSuccess.'subject'
+        ], 200);
+		    else
+          return Response::json([
+            'alert' => Messages::$deleteFail.'subject'
+          ], 500);
+		}
 		else
-			return Response::json(['alert' => Messages::$deleteFail.'subject']);
+      return Response::json([
+        'alert' => 'Subject'.Messages::$notFound
+      ], 404);
+
 	}
 
 	public function getUnits($departmentId, $subjectId)
 	{
 		$units = Subject::find($subjectId)->questions()->lists('unit');
 		$units = array_values(array_unique($units));
-		return Response::json(['units' => $units]);
+    return Response::json([
+      'units' => $units,
+      'alert' => ''
+    ], 200);
 	}
 
 }

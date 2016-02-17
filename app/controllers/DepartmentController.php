@@ -10,7 +10,9 @@ class DepartmentController extends \BaseController {
 			$department->department_head = User::where('department_id', $department->id)->where('permissions', 'like', '%d%')->first();
 		}
 
-		return Response::json($departments);
+    return Response::json([
+      'departments' => $departments
+    ], 200);
 	}
 
 	public function store()
@@ -19,9 +21,10 @@ class DepartmentController extends \BaseController {
 
 		if($validate->fails())
 		{
-			return Response::json(['alert' => Messages::$validateFail,
-				'messages' => $validate->messages()],
-				403);
+      return Response::json([
+        'alert' => Messages::$validateFail,
+        'messages' => $validate->messages()
+      ], 403);
 		}
 		else
 		{
@@ -33,10 +36,14 @@ class DepartmentController extends \BaseController {
 			    	return Response::json(['department' => $department,
 			        	'alert' => Messages::$createSuccess.'department and department head']);
 			    else
-	        		return Response::json(['alert' => Messages::$createSuccess.'department but '.Messages::$createFail.'department head']);
+            return Response::json([
+              'alert' => Messages::$createSuccess.'department but '.Messages::$createFail.'department head'
+            ]);
 		    }
 	        else
-	        	return Response::json(['alert' => Messages::$createFail.'department'], 500);
+            return Response::json([
+              'alert' => Messages::$createFail.'department'
+            ], 500);
 	   	}
 	}
 
@@ -74,7 +81,9 @@ class DepartmentController extends \BaseController {
 		if($department)
 			return Response::json($department);
 		else
-			return Response::json(['alert' => 'Department'.Messages::$notFound]);
+      return Response::json([
+        'alert' => 'Department'.Messages::$notFound
+      ]);
 
 	}
 
@@ -96,14 +105,20 @@ class DepartmentController extends \BaseController {
 		        			'alert' => Messages::$updateSuccess.'department and department head'],
 		        			200);
 		    		else
-	        			return Response::json(['alert' => Messages::$updateFail.'department head'], 500);
+              return Response::json([
+                'alert' => Messages::$updateFail.'department head'
+              ], 500);
 		    	}
 			}
 	        else
-	        	return Response::json(['alert' => Messages::$updateFail.'department'], 500);
+            return Response::json([
+              'alert' => Messages::$updateFail.'department'
+            ], 500);
 		}
 		else
-	        return Response::json(['alert' => 'Department'.Messages::$notFound], 404);
+      return Response::json([
+        'alert' => 'Department'.Messages::$notFound
+      ], 404);
 	}
 
 
@@ -165,18 +180,27 @@ class DepartmentController extends \BaseController {
 		if($department)
 		{
 			if($department->delete())
-				return Response::json(['alert' => Messages::$deleteSuccess.'department'], 200);
+        return Response::json([
+          'alert' => Messages::$deleteSuccess.'department'
+        ], 200);
 			else
-				return Response::json(['alert' => Messages::$deleteFail.'department'], 500);
+        return Response::json([
+          'alert' => Messages::$deleteFail.'department'
+        ], 500);
 		}
 		else
-	        return Response::json(['alert' => 'Department'.Messages::$notFound], 404);
+      return Response::json([
+        'alert' => 'Department'.Messages::$notFound
+      ], 404);
 	}
 
 	public function candidates()
 	{
-		$candidates = User::where('permissions', 'not like', '%d%')->get();
-
-		return Response::json($candidates);
+		/* $candidates = User::where('permissions', 'not like', '%d%')->get(); */
+		$candidates = User::where('permissions', 'not like', '%o%')->get();
+    return Response::json([
+      'candidates' => $candidates,
+      'alert' => ''
+    ], 200);
 	}
 }
