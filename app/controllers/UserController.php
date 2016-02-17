@@ -25,10 +25,9 @@ class UserController extends \BaseController {
 		{
 			$details = Input::all();
 			$details['password'] = Hash::make('changeme');
-			/* if(Auth::check()) */
-      if(1)
+			if(Auth::check())
 			{
-				$details['department_id'] = '1' || Auth::user()->department_id;
+				$details['department_id'] = Auth::user()->department_id;
 				if($user = User::create($details))
           return Response::json([
             'alert' => Messages::$createSuccess.'user',

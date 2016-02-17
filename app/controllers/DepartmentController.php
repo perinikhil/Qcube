@@ -196,8 +196,11 @@ class DepartmentController extends \BaseController {
 
 	public function candidates()
 	{
-		$candidates = User::where('permissions', 'not like', '%d%')->get();
-
-		return Response::json($candidates);
+		/* $candidates = User::where('permissions', 'not like', '%d%')->get(); */
+		$candidates = User::where('permissions', 'not like', '%o%')->get();
+    return Response::json([
+      'candidates' => $candidates,
+      'alert' => ''
+    ], 200);
 	}
 }

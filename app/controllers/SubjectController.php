@@ -85,7 +85,7 @@ class SubjectController extends \BaseController {
 
 		if($subject)
 		{
-			if($subject->delete($details))
+			if($subject->delete())
         return Response::json([
           'alert' => Messages::$deleteSuccess.'subject'
         ], 200);
