@@ -9,7 +9,10 @@ class QuestionController extends \BaseController {
 		{
 			$question->attachment = Attachment::where('question_id', $question->id)->first();
 		}
-		return Response::json($questions);
+    return Response::json([
+      'questions' => $questions,
+      'alert' => ''
+    ], 200);
 	}
 
 
@@ -22,17 +25,22 @@ class QuestionController extends \BaseController {
 
 		if($validate->fails())
 		{
-			return Response::json(['alert' => Messages::$validateFail,
-				'messages' => $validate->messages()], 403);
+      return Response::json([
+        'alert' => Messages::$validateFail,
+        'messages' => $validate->messages()
+      ], 403);
 		}
 		else
 		{
 			if($question = Question::create($details))
-				return Response::json(['question' => $question,
-      		'alert' => Messages::$createSuccess.'question'],
-      		200);
+        return Response::json([
+          'question' => $question,
+          'alert' => Messages::$createSuccess.'question'
+        ], 200);
 			else
-	    	return Response::json(['alert' => Messages::$createFail.'question'], 500);
+        return Response::json([
+          'alert' => Messages::$createFail.'question'
+        ], 500);
 		}
 	}
 
@@ -47,7 +55,9 @@ class QuestionController extends \BaseController {
 			return Response::json($question);
 		}
 		else
-			return Response::json(['alert' => 'Question'.Messages::$notFound], 404);
+      return Response::json([
+        'alert' => 'Question'.Messages::$notFound
+      ], 404);
 	}
 
 
@@ -60,12 +70,18 @@ class QuestionController extends \BaseController {
 		if($question)
 		{
 			if($question->update($details))
-				return Response::json(['alert' => Messages::$updateSuccess.'question'], 200);
+        return Response::json([
+          'alert' => Messages::$updateSuccess.'question'
+        ], 200);
 			else
-      	return Response::json(['alert' => Messages::$updateFail.'question'], 500);
+        return Response::json([
+          'alert' => Messages::$updateFail.'question'
+        ], 500);
 		}
 		else
-			return Response::json(['alert' => Messages::$notFound], 404);
+      return Response::json([
+        'alert' => Messages::$notFound
+      ], 404);
 	}
 
 	public function destroy($departmentId, $subjectId, $questionId)
@@ -75,12 +91,18 @@ class QuestionController extends \BaseController {
 		if($question)
 		{
 			if($question->delete())
-				return Response::json(['alert' => Messages::$deleteSuccess.'question']);
+        return Response::json([
+          'alert' => Messages::$deleteSuccess.'question'
+        ], 200);
 			else
-				return Response::json(['alert' => Messages::$deleteFail.'question']);
+        return Response::json([
+          'alert' => Messages::$deleteFail.'question'
+        ], 500);
 		}
 		else
-			return Response::json(['alert' => Messages::$notFound], 404);
+      return Response::json([
+        'alert' => Messages::$notFound
+      ], 404);
 	}
 
 }

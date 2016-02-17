@@ -14,9 +14,10 @@ class AuthenticationController extends \BaseController
 
 		if ($validator->fails())
 		{
-			return Response::json([ 'alert' => Messages::$validateFail,
-				'messages' => $validator->messages()],
-				403);
+      return Response::json([
+        'alert' => Messages::$validateFail,
+        'messages' => $validator->messages()
+      ], 403);
 		}
 		else
 		{
@@ -26,12 +27,14 @@ class AuthenticationController extends \BaseController
 				Auth::logout();
 			}
 			if (Auth::attempt($credentials))
-				return Response::json(['user' => Auth::user(),
-					'alert' => Messages::$loginSuccess],
-					200);
+        return Response::json([
+          'user' => Auth::user(),
+          'alert' => Messages::$loginSuccess
+        ], 200);
 			else
-				return Response::json(['alert' => Messages::$loginFail],
-					403);
+        return Response::json([
+          'alert' => Messages::$loginFail
+        ], 403);
 		}
 	}
 
@@ -40,11 +43,13 @@ class AuthenticationController extends \BaseController
 		if(Auth::check())
 		{
 			Auth::logout();
-			return Response::json(['alert' => Messages::$logoutSuccess],
-				200);
+      return Response::json([
+        'alert' => Messages::$logoutSuccess
+      ], 200);
 		}
 		else
-			return Response::json(['alert' => Messages::$logoutFail],
-				500);
+      return Response::json([
+        'alert' => Messages::$logoutFail
+      ], 500);
 	}
 }

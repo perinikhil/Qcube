@@ -18,13 +18,18 @@ class RandomGeneratorController extends \BaseController {
 
     forEach($paperData as &$main)
       if(!self::buildMain($main))
-        return Response::json(['alert' => 'Insufficient questions'], 404);
+        return Response::json([
+          'alert' => 'Insufficient questions'
+        ], 404);
 
     usort($paperData, self::buildSorter('index'));
 
     self::buildGeneratedPaper($generatedPaper, $paperData, $pattern);
 
-		return Response::json($generatedPaper);
+    return Response::json([
+      'paper' => $generatedPaper,
+      'alert' => ''
+    ], 200);
 	}
 
   function applyIndices(&$paperData) {
