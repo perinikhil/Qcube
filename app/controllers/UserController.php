@@ -30,8 +30,8 @@ class UserController extends \BaseController {
 				$details['department_id'] = Auth::user()->department_id;
 				if($user = User::create($details))
           return Response::json([
-            'alert' => Messages::$createSuccess.'user',
-            'user' => $user
+            'user' => $user,
+            'alert' => Messages::$createSuccess.'user'
           ], 200);
 				else
           return Response::json([
@@ -86,6 +86,7 @@ class UserController extends \BaseController {
 				$details['password'] = Hash::make(Input::get('new_password'));
 				if($user->update($details))
           return Response::json([
+            'user' => $user,
             'alert' => Messages::$updateSuccess.'profile'
           ], 200);
 		        else
@@ -99,6 +100,7 @@ class UserController extends \BaseController {
 		{
 	    if($user->update($details))
         return Response::json([
+          'user' => $user,
           'alert' => Messages::$updateSuccess.'profile'
         ], 200);
 	    else
