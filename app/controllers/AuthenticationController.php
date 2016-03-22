@@ -7,7 +7,7 @@ class AuthenticationController extends \BaseController
 	{
 		$rules = [
 			'email' => 'required',
-			'password' => 'required | alphaNum | min:3'
+			'password' => 'required | min:3'
 		];
 
 		$validator = Validator::make(Input::all(), $rules);
