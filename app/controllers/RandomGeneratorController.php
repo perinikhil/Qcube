@@ -26,6 +26,8 @@ class RandomGeneratorController extends \BaseController {
 
     self::buildGeneratedPaper($generatedPaper, $paperData, $pattern);
 
+    Messages::showAlert($subjectId, $generatedPaper);
+
     return Response::json([
       'paper' => $generatedPaper,
       'alert' => ''
@@ -86,14 +88,14 @@ class RandomGeneratorController extends \BaseController {
 
   function buildQuery($main) {
     $units = $main['units'];
-    $courseOutcomes = $main['course_outcomes'];
+    /* $courseOutcomes = $main['course_outcomes']; */
 		$query = Question::where('subject_id', self::$subjectId)->whereIn('unit', $units);
-		$query->where(function($q) use ($courseOutcomes) {
-			foreach($courseOutcomes as $courseOutcome)
-			{
-				$q->orWhere('course_outcome', 'like', '%'.$courseOutcome.'%');
-			}
-		});
+		/* $query->where(function($q) use ($courseOutcomes) { */
+		/* 	foreach($courseOutcomes as $courseOutcome) */
+		/* 	{ */
+		/* 		$q->orWhere('course_outcome', 'like', '%'.$courseOutcome.'%'); */
+		/* 	} */
+		/* }); */
     return $query;
   }
 
