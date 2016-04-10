@@ -24,6 +24,7 @@ class RandomGeneratorController extends \BaseController {
 
     self::buildGeneratedPaper($generatedPaper, $paperData, $pattern);
 
+    Messages::showAlert($subjectId, $generatedPaper);
 		return Response::json($generatedPaper);
 	}
 
