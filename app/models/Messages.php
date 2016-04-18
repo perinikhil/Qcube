@@ -22,12 +22,12 @@ class Messages {
 
   public static function showAlert ($subjectId, $paperData) {
     $subject = Subject::find($subjectId);
-    $fileName = public_path() . '/uploads/tmp/' . $subject->semester . '_' . $subject->abbr;
+    $fileName = public_path() . '/uploads/tmp/' . $subject->semester . '_' . $subject->abbr . '_' . time();
     File::put($fileName, date('d-m-Y') . "\n\n");
     File::append($fileName, $subject . "\n\n");
     foreach($paperData as $section)
       foreach($section as $main)
-        foreach($main["questions"] as $question)
-          File::append($fileName, $question->text . "    (" . $question->marks . ")\n\n");
+        foreach($main['questions'] as $question)
+          File::append($fileName, '[' . $question->id . '] ' . $question->text . '    (' . $question->marks . ')\n\n');
   }
 }
